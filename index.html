@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AGUS Leak Detection</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:'DM Sans',Arial,sans-serif;color:#1e293b}
+body{display:flex;flex-direction:column}
+header{background:linear-gradient(90deg,#0b3d91,#6d28d9);color:#fff;padding:10px 16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+header h1{font-size:15px;margin:0 10px 0 0}
+.kpi{display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:12px;background:rgba(255,255,255,.14);cursor:pointer;border:2px solid transparent}
+.kpi.on{border-color:#fff}.kpi b{font-size:20px}.kpi span{font-size:11px;line-height:1.1}
+.dot{width:12px;height:12px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:inline-block}
+.act{background:#2563eb}.sus{background:#9333ea}.rep{background:#10b981}
+#bar{display:flex;gap:8px;padding:8px 14px;background:#eef2ff;align-items:center;flex-wrap:wrap;font-size:12px}
+#bar select,#bar button{padding:6px 10px;border-radius:8px;border:1px solid #c7d2fe;background:#fff;font-size:12px}
+#bar button.p{background:linear-gradient(90deg,#2563eb,#7c3aed);color:#fff;border:0;font-weight:700;cursor:pointer}
+#wrap{flex:1;display:flex;min-height:0;position:relative}
+#side{width:190px;padding:10px;background:#f8fafc;border-right:1px solid #e2e8f0;font-size:12px;overflow:auto}
+#side h4{margin:4px 0 6px;font-size:11px;letter-spacing:.5px;color:#64748b;text-transform:uppercase}
+#side label{display:flex;gap:6px;align-items:center;margin:5px 0;cursor:pointer}
+#map{flex:1}
+#card{position:absolute;right:12px;top:12px;width:340px;max-width:calc(100% - 24px);max-height:calc(100% - 24px);overflow:auto;background:#fff;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.3);padding:14px;z-index:1000;display:none;font-size:12px}
+#card h3{margin:0 0 6px;font-size:15px}.x{float:right;cursor:pointer;border:0;background:none;font-size:16px}
+.tl{display:flex;justify-content:space-between;margin:12px 0;text-align:center;font-size:10px;color:#64748b}
+.tl div{flex:1}.tl i{display:block;width:12px;height:12px;border-radius:50%;margin:0 auto 3px;background:#cbd5e1}.tl i.on{background:#10b981}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#f1f5f9;border-radius:10px;padding:8px;margin-bottom:8px}.g small{color:#64748b;display:block}
+#card textarea{width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:6px;font:inherit}
+#msg{position:absolute;left:210px;bottom:10px;background:#1e293b;color:#fff;border-radius:8px;padding:6px 12px;font-size:12px;z-index:1000;display:none}
+</style></head><body>
+<header>
+  <h1>💧 AGUS Leak Detection</h1>
+  <div class="kpi on" data-s="Active"><i class="dot act"></i><b id="n-Active">0</b><span>Active<br>Leaks</span></div>
+  <div class="kpi on" data-s="Repaired"><i class="dot rep"></i><b id="n-Repaired">0</b><span>Repaired<br>Leaks</span></div>
+  <div class="kpi on" data-s="Suspected"><i class="dot sus"></i><b id="n-Suspected">0</b><span>Suspected<br>Locations</span></div>
+</header>
+<div id="bar">
+  <select id="fType"><option value="">All leak types</option><option>Main</option><option>Service</option><option>Valve</option><option>Hydrant</option></select>
+  <select id="fSub"><option value="">All sub types</option><option>Pipe</option><option>Joint</option><option>Fitting</option></select>
+  <button id="reset">Reset</button>
+  <button class="p" id="add">＋ Add Leak (click map)</button>
+  <span id="src" style="margin-left:auto;color:#64748b"></span>
+</div>
+<div id="wrap">
+  <div id="side">
+    <h4>Map Type</h4>
+    <label><input type="radio" name="bm" value="sat" checked> Satellite</label>
+    <label><input type="radio" name="bm" value="street"> Street</label>
+    <h4>Investigated Results</h4>
+    <label><input type="checkbox" class="lay" value="Active" checked> <i class="dot act"></i> Leaks</label>
+    <label><input type="checkbox" class="lay" value="Suspected" checked> <i class="dot sus"></i> Suspected</label>
+    <label><input type="checkbox" class="lay" value="Repaired" checked> <i class="dot rep"></i> Repaired</label>
+  </div>
+  <div id="map"></div>
+  <div id="card"></div>
+  <div id="msg"></div>
+</div>
+<script>
+/* ── CONFIG: deployed Google Apps Script Web App URL (see Code.gs). Empty = demo data kept in this browser. ── */
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbyIw6X-s-uijCL09vle3Tf-Tp0r14LRpJkB-_2M5ePW-zGHRap0DQzHRFjOHUDhylV0Mw/exec';
+var CENTER = [10.1129, 123.6740], COLORS = {Active:'#2563eb',Suspected:'#9333ea',Repaired:'#10b981'};
+var leaks = [], shown = {Active:1,Suspected:1,Repaired:1}, adding = false, markers = {};
+var sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19});
+var st  = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19});
+var map = L.map('map',{layers:[sat]}).setView(CENTER,13);
+function $(i){return document.getElementById(i)}
+function toast(t){var m=$('msg');m.textContent=t;m.style.display='block';setTimeout(function(){m.style.display='none'},2200)}
+function demo(){return [
+ {id:'L-1001',lat:10.1129,lng:123.6740,status:'Active',type:'Main',sub:'Pipe',pipe:'Polyethylene / PVC',address:'Poblacion District',poi:'2026-05-25',leak:'2026-06-23',repaired:'',comments:''},
+ {id:'L-1002',lat:10.1180,lng:123.6805,status:'Suspected',type:'Service',sub:'Joint',pipe:'PVC',address:'Sitio Riverside',poi:'2026-07-02',leak:'',repaired:'',comments:''},
+ {id:'L-1003',lat:10.1075,lng:123.6685,status:'Repaired',type:'Main',sub:'Pipe',pipe:'Polyethylene / PVC',address:'Poblacion District',poi:'2025-09-25',leak:'2026-06-23',repaired:'2026-07-06',comments:'ML-NS-CON'}]}
+function load(){
+  if(!GAS_URL){var s=localStorage.getItem('agus_leaks');leaks=s?JSON.parse(s):demo();$('src').textContent='Demo data (set GAS_URL to sync)';draw();return}
+  fetch(GAS_URL+'?action=list').then(function(r){return r.json()}).then(function(d){leaks=d.leaks||[];$('src').textContent='Live · Google Sheet';draw()})
+   .catch(function(){leaks=demo();$('src').textContent='Offline demo data';draw()})}
+function save(l){
+  if(!GAS_URL){localStorage.setItem('agus_leaks',JSON.stringify(leaks));return}
+  fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'save',leak:l})}).then(function(){toast('Saved')}).catch(function(){toast('Save failed')})}
+function icon(s){return L.divIcon({className:'',iconSize:[22,22],iconAnchor:[11,22],html:'<div style="width:22px;height:22px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:'+COLORS[s]+';border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.5)"></div>'})}
+function visible(l){return shown[l.status]&&(!$('fType').value||l.type===$('fType').value)&&(!$('fSub').value||l.sub===$('fSub').value)}
+function draw(){
+  Object.keys(markers).forEach(function(k){map.removeLayer(markers[k])});markers={};
+  ['Active','Repaired','Suspected'].forEach(function(s){$('n-'+s).textContent=leaks.filter(function(l){return l.status===s}).length});
+  leaks.filter(visible).forEach(function(l){markers[l.id]=L.marker([l.lat,l.lng],{icon:icon(l.status)}).addTo(map).on('click',function(){show(l)})})}
+function show(l){
+  var c=$('card'),rep=l.status==='Repaired';
+  c.style.display='block';
+  c.innerHTML='<button class="x" onclick="this.parentNode.style.display=\'none\'">✕</button><h3>'+l.status+' · '+l.id+'</h3>'
+   +'<div><b>Address:</b> '+(l.address||'—')+'<br><b>Pipe Type:</b> '+(l.pipe||'—')+'<br><b>Coords:</b> '+l.lat.toFixed(5)+', '+l.lng.toFixed(5)+'</div>'
+   +'<div class="tl"><div><i class="on"></i>POI<br>'+(l.poi||'')+'</div><div><i class="'+(l.leak?'on':'')+'"></i>Leak<br>'+(l.leak||'')+'</div><div><i class="'+(rep?'on':'')+'"></i>Repaired<br>'+(l.repaired||'')+'</div></div>'
+   +'<div class="g"><div><small>Leak Type</small><b>'+(l.type||'—')+'</b></div><div><small>Sub Type</small><b>'+(l.sub||'—')+'</b></div></div>'
+   +'<small>Comments</small><textarea id="cm" rows="3">'+(l.comments||'')+'</textarea>'
+   +'<label style="display:block;margin-top:8px"><input type="checkbox" id="mr" '+(rep?'checked':'')+'> Mark as Repaired</label>'
+   +'<button class="p" style="margin-top:8px;padding:7px 14px;border:0;border-radius:8px;background:#2563eb;color:#fff;font-weight:700;cursor:pointer" id="sv">Save</button>';
+  $('sv').onclick=function(){
+    l.comments=$('cm').value;
+    if($('mr').checked&&l.status!=='Repaired'){l.status='Repaired';l.repaired=new Date().toISOString().slice(0,10)}
+    else if(!$('mr').checked&&l.status==='Repaired'){l.status='Active';l.repaired=''}
+    save(l);draw();show(l)}}
+map.on('click',function(e){
+  if(!adding)return;adding=false;$('add').textContent='＋ Add Leak (click map)';
+  var l={id:'L-'+Date.now().toString().slice(-6),lat:e.latlng.lat,lng:e.latlng.lng,status:'Suspected',type:'Main',sub:'Pipe',pipe:'',address:'',poi:new Date().toISOString().slice(0,10),leak:'',repaired:'',comments:''};
+  leaks.push(l);save(l);draw();show(l)});
+$('add').onclick=function(){adding=!adding;this.textContent=adding?'Click on the map…':'＋ Add Leak (click map)'};
+document.querySelectorAll('.kpi').forEach(function(k){k.onclick=function(){var s=k.dataset.s;shown[s]=shown[s]?0:1;k.classList.toggle('on',!!shown[s]);document.querySelector('.lay[value='+s+']').checked=!!shown[s];draw()}});
+document.querySelectorAll('.lay').forEach(function(c){c.onchange=function(){shown[c.value]=c.checked?1:0;document.querySelector('.kpi[data-s='+c.value+']').classList.toggle('on',c.checked);draw()}});
+document.querySelectorAll('[name=bm]').forEach(function(r){r.onchange=function(){map.removeLayer(sat);map.removeLayer(st);(r.value==='sat'?sat:st).addTo(map)}});
+$('fType').onchange=$('fSub').onchange=draw;
+$('reset').onclick=function(){$('fType').value=$('fSub').value='';shown={Active:1,Suspected:1,Repaired:1};document.querySelectorAll('.kpi').forEach(function(k){k.classList.add('on')});document.querySelectorAll('.lay').forEach(function(c){c.checked=true});draw()};
+load();
+</script></body></html>
