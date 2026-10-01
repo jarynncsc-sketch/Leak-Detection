@@ -75,7 +75,7 @@ html,body{margin:0;height:100vh;height:100dvh;overflow:hidden;font-family:'DM Sa
 .seg button.on{background:linear-gradient(120deg,#2563eb,#4f6ef7);color:#fff}
 #dlabel{font-weight:800;color:#123aa0;margin-left:3px;white-space:nowrap}#dsum{color:#71809c;font-weight:700;white-space:nowrap}
 #dmeta{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
-#legend{position:absolute;bottom:16px;left:14px;z-index:1000;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border:1px solid #dde5f6;border-radius:16px;box-shadow:0 12px 30px rgba(16,42,110,.16);padding:11px 14px;font-size:11px}
+#legend{position:absolute;bottom:16px;right:14px;left:auto;z-index:1000;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border:1px solid #dde5f6;border-radius:16px;box-shadow:0 12px 30px rgba(16,42,110,.16);padding:11px 14px;font-size:11px;max-width:calc(100% - 160px);overflow:auto}
 @keyframes agusPulse{0%{transform:scale(.6);opacity:.45}100%{transform:scale(1.25);opacity:0}}
 @media (prefers-reduced-motion:reduce){.live-dot{animation:none}}
 #legend .lg-t{font-weight:800;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#8c9ab4;margin-bottom:6px}
@@ -146,7 +146,8 @@ body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-col
  .tc b{font-size:20px;margin-bottom:1px}.tc .lb{font-size:9.5px;white-space:normal;line-height:1.15}.tc .sub{display:none}
  .tc.add{padding:9px 12px;font-size:11px}.tc.exp{min-width:56px;padding:8px 9px}
  .dbar{flex:1 1 100%;padding:6px;gap:5px}.dbar button,.dbar input,.dbar select{font-size:10px;padding:5px}.seg button{padding:5px 7px;font-size:10px}
- #legend{bottom:10px;right:9px;left:auto;padding:8px 10px;font-size:10px;border-radius:13px}#legend label{margin:4px 0;gap:6px}
+ #legend{bottom:9px;left:auto;right:9px;padding:8px 10px;font-size:10px;border-radius:13px}
+#legend label{margin:4px 0;gap:6px}
  #card{left:9px;right:9px;top:auto;bottom:204px;width:auto;max-height:56%;padding:14px;border-radius:18px}
  #src{left:9px;right:auto;top:auto;bottom:10px;max-width:calc(100% - 170px);overflow-wrap:anywhere}
  #syncBadge{left:9px;right:auto;top:auto;bottom:42px;max-width:calc(100% - 170px);overflow-wrap:anywhere}
@@ -260,7 +261,7 @@ function demo(){return [
  {id:'L-1004',lat:10.1152,lng:123.6669,status:'Repair',type:'Main',sub:'Joint',pipe:'HDPE',address:'Barangay Sta. Cruz ·Km 3',poi:'2026-06-11',leak:'2026-06-30',repairStart:'2026-07-09',repaired:'',comments:'Crew on site · excavation started'}]}
 /* Local-first field capture. Queue entries are retained until the web app returns a successful HTTP response. */
 var LOCAL_KEY='agus_leaks_cache_v2', PENDING_KEY='agus_leaks_outbox_v2';
-var syncBusy=false, syncTimer=null;
+var syncBusy=false, syncTimer=null, syncFadeT=0;
 function safeRead(key,fallback){try{var v=localStorage.getItem(key);return v?JSON.parse(v):fallback}catch(e){return fallback}}
 function safeWrite(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true}catch(e){toast('Device storage is full or unavailable');return false}}
 function getPending(){var q=safeRead(PENDING_KEY,[]);return Array.isArray(q)?q:[]}
@@ -276,7 +277,10 @@ function normalize(l){
   if(!l.repairStart)l.repairStart=l.repairing||l.repairDate||l.repair_started||'';
   return l}
 function mergeById(primary,secondary){var out=[],idx={};(primary||[]).concat(secondary||[]).forEach(function(l){if(!l||!l.id||!Number.isFinite(Number(l.lat))||!Number.isFinite(Number(l.lng)))return;l=normalize(l);var key=String(l.id);if(Object.prototype.hasOwnProperty.call(idx,key))out[idx[key]]=l;else{idx[key]=out.length;out.push(l)}});return out}
-function updateSyncBadge(){var b=$('syncBadge');if(!b)return;var n=getPending().length;if(!navigator.onLine){b.textContent='OFFLINE · '+n+' pending';b.style.display='block'}else if(n){b.textContent='SYNC PENDING · '+n;b.style.display='block'}else{b.textContent='SYNCED · no pending records';b.style.display='block';b.style.opacity='.82'}}
+function updateSyncBadge(){var b=$('syncBadge');if(!b)return;var n=getPending().length;if(!navigator.onLine){b.textContent='OFFLINE · '+n+' pending';b.style.display='block';b.style.opacity='1';b.style.transition='none'}else if(n){b.textContent='SYNC PENDING · '+n;b.style.display='block';b.style.opacity='1';b.style.transition='none'}else{b.textContent='SYNCED · no pending records';b.style.display='block';b.style.opacity='.82'}
+ clearTimeout(syncFadeT);
+ /* nothing left to report: fade the synced badge out after 60s and drop it from the layout */
+ if(navigator.onLine&&!n)syncFadeT=setTimeout(function(){b.style.transition='opacity .8s';b.style.opacity='0';setTimeout(function(){if(!getPending().length&&navigator.onLine)b.style.display='none'},900)},60000)}
 function updateSourceLabel(label){if($('src'))$('src').textContent=label}
 function load(){
   var cached=safeRead(LOCAL_KEY,[]);if(!Array.isArray(cached))cached=[];
