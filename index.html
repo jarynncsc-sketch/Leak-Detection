@@ -4,8 +4,9 @@
 <title>AGUS Leak Detection</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="pipeline-data.js"></script>
+  <style>
 *{box-sizing:border-box}
 :root{--navy:#0b1f5c;--blue:#2563eb;--cyan:#22c7d9;--purple:#8b5cf6;--amber:#f59e0b;--green:#10b981;--ink:#0f1e42;--muted:#5b6b8c;--line:#dde5f6;--panel:#fff;--canvas:#eef2fb;--shadow:0 12px 34px rgba(16,42,110,.13)}
 html,body{margin:0;height:100vh;height:100dvh;overflow:hidden;font-family:'DM Sans','Segoe UI',sans-serif;color:var(--ink);background:radial-gradient(1100px 620px at 6% -14%,#d8e5ff 0%,transparent 58%),radial-gradient(900px 520px at 104% -8%,#e7dcff 0%,transparent 55%),var(--canvas)}
@@ -46,7 +47,7 @@ html,body{margin:0;height:100vh;height:100dvh;overflow:hidden;font-family:'DM Sa
 #list li .st{margin-left:auto;font-size:9px;font-weight:800;padding:5px 8px;border-radius:99px;color:#fff;white-space:nowrap}
 #list li.empty{justify-content:center;color:#94a3b8;border-style:dashed;box-shadow:none}
 .dot{width:12px;height:12px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:inline-block;flex-shrink:0;box-shadow:0 0 0 3px rgba(15,30,66,.06)}
-.act{background:#2563eb}.sus{background:#8b5cf6}.rep{background:#10b981}.fix{background:#f59e0b}
+.act{background:#dc2626;animation:agusBlink 1s ease-in-out infinite}.sus{background:#8b5cf6}.rep{background:#10b981}.fix{background:#f59e0b;animation:agusBlink 1s ease-in-out infinite}
 #mapbox{position:relative;flex:1;height:100%;border-radius:20px;overflow:hidden;box-shadow:var(--shadow);min-width:0;border:1px solid #d6e2f5}
 #map{position:absolute;inset:0}
 #top{--cardW:132px;position:absolute;top:14px;left:14px;right:14px;display:flex;flex-wrap:wrap;align-items:stretch;gap:10px;z-index:1000}
@@ -77,10 +78,13 @@ html,body{margin:0;height:100vh;height:100dvh;overflow:hidden;font-family:'DM Sa
 #dmeta{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
 #legend{position:absolute;bottom:16px;right:14px;left:auto;z-index:1000;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border:1px solid #dde5f6;border-radius:16px;box-shadow:0 12px 30px rgba(16,42,110,.16);padding:11px 14px;font-size:11px;max-width:calc(100% - 160px);overflow:auto}
 @keyframes agusPulse{0%{transform:scale(.6);opacity:.45}100%{transform:scale(1.25);opacity:0}}
-@media (prefers-reduced-motion:reduce){.live-dot{animation:none}}
+/* Active Leak (red) and Ongoing Repair (orange) blink so crews catch them from a moving vehicle; Repaired stays steady green. */
+@keyframes agusBlink{0%,100%{opacity:1}50%{opacity:.18}}
+@media (prefers-reduced-motion:reduce){.act,.fix,.live-dot,.agus-blink{animation:none !important}}
 #legend .lg-t{font-weight:800;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#8c9ab4;margin-bottom:6px}
 #legend label{display:flex;gap:8px;align-items:center;margin:6px 0;cursor:pointer;white-space:nowrap;font-weight:600;color:#31456f}
 #legend hr{border:0;border-top:1px solid #e6ecf7;margin:8px 0}
+#legend #pipeInfo{font-size:9.5px;font-weight:700;color:#8c9ab4;letter-spacing:.2px;margin-top:5px;padding-top:5px;border-top:1px dashed #e6ecf7;white-space:nowrap}
 #card{position:absolute;right:18px;top:calc(var(--topH,86px) + 16px);width:376px;max-width:calc(100% - 36px);max-height:calc(100% - var(--topH,86px) - 40px);overflow:auto;background:rgba(255,255,255,.98);backdrop-filter:blur(10px);border:1px solid #dde5f6;border-radius:20px;box-shadow:0 20px 50px rgba(11,31,92,.3);padding:18px;z-index:1100;display:none;font-size:12px}
 #card h3{margin:0 0 4px;font-size:16px;color:#0f2a72;font-family:'Syne','DM Sans',sans-serif}
 #card .chip{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#fff;padding:4px 9px;border-radius:99px;margin-bottom:8px}
@@ -203,7 +207,7 @@ body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-col
     <div id="map"></div>
     <div id="top">
       <div class="tc add" id="add">＋ Add Leak</div>
-      <div class="tc" data-s="Active" style="--acc:#2563eb" title="Show or hide active leaks"><b id="n-Active">0</b><span class="lb">Active Leak</span><span class="sub">needs repair</span></div>
+      <div class="tc" data-s="Active" style="--acc:#dc2626" title="Show or hide active leaks"><b id="n-Active">0</b><span class="lb">Active Leak</span><span class="sub">needs repair</span></div>
       <div class="tc" data-s="Repair" style="--acc:#f59e0b" title="Show or hide leaks under ongoing repair"><b id="n-Repair">0</b><span class="lb">Ongoing Repair</span><span class="sub">crew assigned</span></div>
       <div class="tc" data-s="Repaired" style="--acc:#10b981" title="Show or hide repaired leaks"><b id="n-Repaired">0</b><span class="lb">Repaired</span><span class="sub">closed out</span></div>
       <div class="tc" data-s="Suspected" style="--acc:#8b5cf6" title="Show or hide suspected locations"><b id="n-Suspected">0</b><span class="lb">Suspected</span><span class="sub">to verify</span></div>
@@ -227,7 +231,16 @@ body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-col
       <label><input type="checkbox" class="lay" value="Active" checked><i class="dot act"></i> Active Leak</label>
       <label><input type="checkbox" class="lay" value="Repair" checked><i class="dot fix"></i> Ongoing Repair</label>
       <label><input type="checkbox" class="lay" value="Repaired" checked><i class="dot rep"></i> Repaired</label>
-      <label><input type="checkbox" class="lay" value="Suspected" checked><i class="dot sus"></i> Suspected</label>
+      <label><input type="checkbox" class="lay" value="Suspected" checked><i class="dot sus"></i> Suspected</label><hr>
+      <div class="lg-t">Pipe network</div>
+      <label><input type="checkbox" id="pipesChk" class="pmat" data-m="UPVC" checked><i class="dot" style="background:#16a34a;border:1px solid #0f7c32"></i> UPVC</label>
+      <label><input type="checkbox" id="pipesChk2" class="pmat" data-m="PE" checked><i class="dot" style="background:#2563eb;border:1px solid #1e4fd9"></i> PE</label>
+      <label><input type="checkbox" id="pipesChk3" class="pmat" data-m="PVC" checked><i class="dot" style="background:#0ea5e9;border:1px solid #0284c7"></i> PVC</label>
+      <label><input type="checkbox" id="pipesChk4" class="pmat" data-m="GI" checked><i class="dot" style="background:#f59e0b;border:1px solid #d97706"></i> GI</label>
+      <label><input type="checkbox" id="pipesChk5" class="pmat" data-m="CI" checked><i class="dot" style="background:#dc2626;border:1px solid #b91c1c"></i> CI</label>
+      <label><input type="checkbox" id="pipesChk6" class="pmat" data-m="CEMENT COATED" checked><i class="dot" style="background:#7c2d12;border:1px solid #431407"></i> Cement coated</label>
+      <label><input type="checkbox" id="pipesChk7" class="pmat" data-m="Unknown" checked><i class="dot" style="background:#94a3b8;border:1px solid #64748b"></i> Unknown</label>
+      <div id="pipeInfo"></div>
     </div>
     <div id="src"></div><div id="syncBadge" aria-live="polite">Checking sync status…</div><div id="card"></div><div id="addForm" role="dialog" aria-modal="true" aria-label="Record leak location"></div><div id="msg" role="status" aria-live="polite"></div>
   </div>
@@ -238,10 +251,10 @@ var GAS_URL = 'https://script.google.com/macros/s/AKfycbyIw6X-s-uijCL09vle3Tf-Tp
 var CENTER=[10.1129,123.6740];
 /* Status registry — Repair workflow: Active Leak → Ongoing Repair → Repaired (Suspected precedes it). */
 var STATUS={
- Active:{label:'Active Leak',cls:'act',color:'#2563eb',sub:'needs repair'},
- Repair:{label:'Ongoing Repair',cls:'fix',color:'#f59e0b',sub:'crew assigned'},
- Repaired:{label:'Repaired',cls:'rep',color:'#10b981',sub:'closed out'},
- Suspected:{label:'Suspected',cls:'sus',color:'#8b5cf6',sub:'to verify'}};
+  Active:{label:'Active Leak',cls:'act',color:'#dc2626',sub:'needs repair',blink:1},
+  Repair:{label:'Ongoing Repair',cls:'fix',color:'#f59e0b',sub:'crew assigned',blink:1},
+  Repaired:{label:'Repaired',cls:'rep',color:'#10b981',sub:'closed out'},
+  Suspected:{label:'Suspected',cls:'sus',color:'#8b5cf6',sub:'to verify'}};
 var STATUS_KEYS=['Active','Repair','Repaired','Suspected'];
 var STEP_KEYS=['Suspected','Active','Repair','Repaired'];
 function COLORS(s){return (STATUS[s]||STATUS.Active).color}
@@ -251,6 +264,70 @@ var leaks=[], shown={Active:1,Repair:1,Repaired:1,Suspected:1}, adding=false, ma
 var sat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,crossOrigin:true});
 var st=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,crossOrigin:true});
 var map=L.map('map',{layers:[sat]}).setView(CENTER,13);
+map.createPane('pipes');map.getPane('pipes').style.zIndex=380;
+var pipeLayer=null;
+function pipeColor(m){
+  switch(String(m||'').toUpperCase()){
+    case 'UPVC': return '#16a34a';
+    case 'PE': return '#2563eb';
+    case 'PVC': return '#0ea5e9';
+    case 'GI': return '#f59e0b';
+    case 'CI': return '#dc2626';
+    case 'CEMENT COATED': return '#7c2d12';
+    default: return '#94a3b8';
+  }
+}
+var pipeStats={total:0,len:0};
+function initPipeLayer(){
+  if(pipeLayer||!window.PIPES||!Array.isArray(window.PIPES.segs))return;
+  var feats=[];
+  var segs=window.PIPES.segs,mats=window.PIPES.materials||[];
+  for(var i=0;i<segs.length;i++){
+    var s=segs[i];
+    /* [DC_ID,NODE1,NODE2,LENGTH,MATERIAL,STATUS,DIAMETER,MONTH,YEAR,"lng,lat;lng,lat;..."] */
+    var m=mats[s[4]]||'Unknown';
+    var parts=String(s[9]||'').split(';'),lines=[];
+    for(var j=0;j<parts.length;j++){
+      if(!parts[j])continue;
+      var nums=parts[j].split(','),ln=[];
+      for(var k=0;k+1<nums.length;k+=2){
+        var lo=parseFloat(nums[k]),la=parseFloat(nums[k+1]);
+        /* GeoJSON positions are [lng, lat]; the stored string is already lng-first. */
+        if(isFinite(la)&&isFinite(lo))ln.push([lo,la]);
+      }
+      if(ln.length>1)lines.push(ln);
+    }
+    var coords=lines;
+    if(!coords.length)continue;
+    var pr={DC_ID:s[0],NODE1:s[1],NODE2:s[2],LENGTH:s[3],MATERIALS:m,STATUS:s[5],DIAMETER:s[6],MONTH:s[7],YEAR:s[8]};
+    feats.push({type:'Feature',geometry:{type:'MultiLineString',coordinates:coords},properties:pr});
+    pipeStats.total++;
+    if(isFinite(parseFloat(pr.LENGTH)))pipeStats.len+=parseFloat(pr.LENGTH);
+  }
+  if($('pipeInfo'))$('pipeInfo').textContent=pipeStats.total.toLocaleString()+' segments · '+(pipeStats.len/1000).toFixed(1)+' km';
+  pipeLayer=L.geoJSON({type:'FeatureCollection',features:feats},{
+    pane:'pipes',
+    style:function(f){return{color:pipeColor(f.properties.MATERIALS),weight:2.2,opacity:.55,dashArray:'',interactive:true}},
+    onEachFeature:function(f,l){
+      var p=f.properties;
+      l.bindPopup('<b>Pipeline</b><br>'+(p.DC_ID||'')+'<br>'+p.MATERIALS+(p.DIAMETER?(' &Oslash;'+p.DIAMETER+' mm'):'')+(p.LENGTH?('<br>'+Number(p.LENGTH).toLocaleString()+' m'):'')+'<br>Nodes: '+(p.NODE1||'&ndash;')+'&ndash;'+(p.NODE2||'')+(p.STATUS?('<br>Status: '+p.STATUS):'')+(p.YEAR?('<br>Year: '+p.YEAR):''));
+    }
+  });
+  pipeLayer.addTo(map);
+  applyPipeFilter();
+}
+/* Material checkboxes dim/hide pipes; leak markers, counts and exports stay untouched. */
+function applyPipeFilter(){
+  if(!pipeLayer)return;
+  var on={};[].forEach.call(document.querySelectorAll('.pmat'),function(c){on[c.dataset.m]=c.checked?1:0});
+  var shownCount=0;
+  pipeLayer.eachLayer(function(l){
+    var m=l.feature.properties.MATERIALS||'Unknown',vis=!!on[m];
+    l.setStyle({opacity:vis?.62:0,weight:vis?2.2:0,interactive:vis});
+    if(vis){if(!map.hasLayer(l))l.addTo(map);shownCount++}else if(map.hasLayer(l))map.removeLayer(l);
+  });
+  if($('pipeInfo'))$('pipeInfo').textContent=shownCount.toLocaleString()+' of '+pipeStats.total.toLocaleString()+' segments · '+(pipeStats.len/1000).toFixed(1)+' km';
+}
 function $(i){return document.getElementById(i)}
 function toast(t){var m=$('msg');m.textContent=t;m.style.display='block';setTimeout(function(){m.style.display='none'},2200)}
 function today(){return new Date().toISOString().slice(0,10)}
@@ -319,14 +396,18 @@ function save(l){
 function setNetworkState(){document.body.classList.toggle('offline',!navigator.onLine);updateSyncBadge();if(navigator.onLine){updateSourceLabel('Connection restored · syncing');syncPending()}else updateSourceLabel('Offline · new records save on this device')}
 window.addEventListener('online',setNetworkState);window.addEventListener('offline',setNetworkState);
 window.addEventListener('pageshow',function(){if(navigator.onLine)syncPending()});
-/* Markers: teardrop pin for every status; Ongoing Repair uses a pulsing wrench pin so field crews spot it instantly. */
+/* Markers: teardrop pin for every status. Active Leak (red) and Ongoing Repair (orange) blink with a pulsing
+   halo; Repaired (green) and Suspected stay steady so blinking pins read as "work still open". */
 function icon(s){
-  var col=COLORS(s);
-  if(s==='Repair')return L.divIcon({className:'',iconSize:[26,34],iconAnchor:[13,34],
-    html:'<div style="position:relative"><div style="position:absolute;left:-6px;top:-6px;width:38px;height:38px;border-radius:50%;background:'+col+';opacity:.25;animation:agusPulse 1.9s ease-out infinite"></div>'
-      +'<svg width="26" height="34" viewBox="0 0 26 34" style="overflow:visible;filter:drop-shadow(0 3px 5px rgba(11,31,92,.45))">'
+  var col=COLORS(s),blink=!!(STATUS[s]&&STATUS[s].blink);
+  if(blink)return L.divIcon({className:'',iconSize:[26,34],iconAnchor:[13,34],
+    html:'<div style="position:relative"><div style="position:absolute;left:-6px;top:-6px;width:38px;height:38px;border-radius:50%;background:'+col+';opacity:.28;animation:agusPulse 1.9s ease-out infinite"></div>'
+      +'<svg class="agus-blink" width="26" height="34" viewBox="0 0 26 34" style="overflow:visible;filter:drop-shadow(0 3px 5px rgba(11,31,92,.45));animation:agusBlink 1s ease-in-out infinite">'
       +'<path d="M13 33 3 21V4h20v17z" fill="'+col+'" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>'
-      +'<path d="M8.6 9.4a2.5 2.5 0 1 1 3.4 3.3l3.2 3.2a1.35 1.35 0 0 1-1.9 1.9l-3.2-3.2a2.5 2.5 0 0 1-3.3-3.4l1.7 1.6-.7 1.7-1.7-.7z" fill="#fff"/></svg></div>'});
+      +(s==='Repair'
+        ?'<path d="M8.6 9.4a2.5 2.5 0 1 1 3.4 3.3l3.2 3.2a1.35 1.35 0 0 1-1.9 1.9l-3.2-3.2a2.5 2.5 0 0 1-3.3-3.4l1.7 1.6-.7 1.7-1.7-.7z" fill="#fff"/>'
+        :'<circle cx="13" cy="14" r="3.6" fill="#fff"/>')
+      +'</svg></div>'});
   return L.divIcon({className:'',iconSize:[24,32],iconAnchor:[12,32],
     html:'<svg width="24" height="32" viewBox="0 0 24 32" style="overflow:visible;filter:drop-shadow(0 3px 5px rgba(11,31,92,.4))">'
       +'<path d="M12 31 3 20V4h18v16z" fill="'+col+'" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>'
@@ -545,5 +626,11 @@ if(window.visualViewport)window.visualViewport.addEventListener('resize',fit);
 if(window.ResizeObserver){
   new ResizeObserver(fit).observe($('mapbox'));
   new ResizeObserver(syncTop).observe($('top'))}
-load();setNetworkState();setTimeout(fit,200);
+[].forEach.call(document.querySelectorAll('.pmat'),function(c){c.onchange=applyPipeFilter});
+load();setNetworkState();
+setTimeout(function(){
+  fit();initPipeLayer();
+  /* Frame the pipe network once the map container has its final size. */
+  if(window.PIPES&&window.PIPES.bbox)map.fitBounds([[window.PIPES.bbox[0],window.PIPES.bbox[1]],[window.PIPES.bbox[2],window.PIPES.bbox[3]]],{padding:[24,24]});
+},200);
 </script></body></html>
