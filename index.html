@@ -49,8 +49,7 @@ html,body{margin:0;height:100vh;height:100dvh;overflow:hidden;font-family:'DM Sa
 .act{background:#2563eb}.sus{background:#8b5cf6}.rep{background:#10b981}.fix{background:#f59e0b}
 #mapbox{position:relative;flex:1;height:100%;border-radius:20px;overflow:hidden;box-shadow:var(--shadow);min-width:0;border:1px solid #d6e2f5}
 #map{position:absolute;inset:0}
-#top{position:absolute;top:14px;left:14px;width:auto;max-width:min(calc(100% - 28px),720px);display:flex;flex-direction:column;align-items:flex-start;gap:10px;z-index:1000}
-.kpis{display:flex;flex-wrap:wrap;gap:10px;max-width:100%}
+#top{position:absolute;top:14px;left:14px;right:14px;display:flex;flex-wrap:wrap;align-items:flex-start;gap:10px;z-index:1000}
 .tc{position:relative;flex:0 1 auto;min-width:112px;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border:1px solid #dde5f6;border-radius:16px;padding:12px 14px 12px 18px;display:flex;flex-direction:column;align-items:flex-start;gap:1px;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--muted);text-align:left;box-shadow:0 10px 26px rgba(16,42,110,.13);overflow:hidden;transition:transform .16s,box-shadow .16s,opacity .16s}
 .tc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--acc,#c7d2e8)}
 .tc::after{content:'';position:absolute;right:-30px;top:-30px;width:90px;height:90px;border-radius:50%;background:var(--acc,#c7d2e8);opacity:.1}
@@ -60,14 +59,13 @@ html,body{margin:0;height:100vh;height:100dvh;overflow:hidden;font-family:'DM Sa
 .tc:hover{transform:translateY(-2px);box-shadow:0 16px 32px rgba(16,42,110,.18)}
 .tc.off{opacity:.45;filter:saturate(.35)}
 .tc:active{transform:translateY(0)}
-.toolrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;max-width:100%}
 .tc.add{flex:0 0 auto;background:linear-gradient(120deg,#2563eb,#7c3aed);color:#fff;border:0;align-items:center;padding:12px 18px;white-space:nowrap;box-shadow:0 10px 24px rgba(37,99,235,.35)}
 .tc.add::before,.tc.add::after{display:none}
 .tc.add:hover{box-shadow:0 14px 30px rgba(37,99,235,.45)}
 .tc.exp{flex:0 0 auto;min-width:0;align-items:center;padding:11px 13px;gap:2px}
 .tc.exp b{font-size:17px;font-family:'DM Sans',sans-serif}
 .tc.exp .lb{font-size:10.5px;letter-spacing:.4px}
-.dbar{background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border:1px solid #dde5f6;box-shadow:0 10px 26px rgba(16,42,110,.12);border-radius:16px;padding:9px 11px;display:flex;flex-wrap:wrap;gap:6px;row-gap:7px;align-items:center;font-size:11px;width:auto;max-width:100%}
+.dbar{flex:0 1 auto;min-width:0;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border:1px solid #dde5f6;box-shadow:0 10px 26px rgba(16,42,110,.12);border-radius:16px;padding:9px 11px;display:flex;flex-wrap:wrap;gap:6px;row-gap:7px;align-items:center;font-size:11px}
 .dbar button,.dbar input,.dbar select{font:600 10.5px 'DM Sans',sans-serif;border:1px solid #d8e1f2;border-radius:9px;background:#fff;padding:6px 8px;color:#263a62;cursor:pointer}
 .dbar .nav{font-size:15px;line-height:1;padding:6px 10px;background:#f3f7ff}
 .dbar .nav:disabled{opacity:.4;cursor:default}
@@ -82,7 +80,7 @@ html,body{margin:0;height:100vh;height:100dvh;overflow:hidden;font-family:'DM Sa
 #legend .lg-t{font-weight:800;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#8c9ab4;margin-bottom:6px}
 #legend label{display:flex;gap:8px;align-items:center;margin:6px 0;cursor:pointer;white-space:nowrap;font-weight:600;color:#31456f}
 #legend hr{border:0;border-top:1px solid #e6ecf7;margin:8px 0}
-#card{position:absolute;right:18px;top:200px;width:376px;max-width:calc(100% - 36px);max-height:calc(100% - 220px);overflow:auto;background:rgba(255,255,255,.98);backdrop-filter:blur(10px);border:1px solid #dde5f6;border-radius:20px;box-shadow:0 20px 50px rgba(11,31,92,.3);padding:18px;z-index:1100;display:none;font-size:12px}
+#card{position:absolute;right:18px;top:calc(var(--topH,86px) + 16px);width:376px;max-width:calc(100% - 36px);max-height:calc(100% - var(--topH,86px) - 40px);overflow:auto;background:rgba(255,255,255,.98);backdrop-filter:blur(10px);border:1px solid #dde5f6;border-radius:20px;box-shadow:0 20px 50px rgba(11,31,92,.3);padding:18px;z-index:1100;display:none;font-size:12px}
 #card h3{margin:0 0 4px;font-size:16px;color:#0f2a72;font-family:'Syne','DM Sans',sans-serif}
 #card .chip{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#fff;padding:4px 9px;border-radius:99px;margin-bottom:8px}
 .x{float:right;cursor:pointer;border:0;background:#f0f4ff;border-radius:10px;width:28px;height:28px;font-size:15px;color:#53688e;transition:background .15s}
@@ -128,12 +126,11 @@ body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-col
 @media screen and (min-width:901px) and (max-width:1400px){
  .app-header{padding:0 16px;gap:14px}.brand-block{min-width:250px}.brand-title{font-size:19px}.header-chip{min-width:118px}.module-nav{padding:0 12px}.module-tab{padding:0 14px}
  #dash{padding:10px;gap:10px}.panel{min-width:238px;width:260px}
- #top{max-width:min(calc(100% - 28px),520px)}#kTotal{display:none}
+ #kTotal{display:none}
  .tc{min-width:104px;border-radius:14px;padding:10px 12px 10px 15px}.tc b{font-size:22px}.tc .lb{font-size:10.5px}.tc .sub{font-size:8.5px;letter-spacing:.6px}
  .dbar{padding:7px 8px;font-size:10.5px}
  #card{width:330px}
 }
-@media screen and (min-width:901px) and (max-width:1150px){#card{top:auto;bottom:16px;max-height:58%}}
 @media screen and (max-width:900px){
  html,body{overflow:hidden}.app-header{height:70px;padding:0 12px;gap:10px}.brand-block{min-width:0;gap:8px}.brand-mark{width:38px;height:38px;font-size:20px;border-radius:12px}.brand-title{font-size:16px}.brand-title span{font-size:9px}.brand-subtitle{font-size:9px}.header-context{display:none}.header-actions{gap:5px}.header-chip{min-width:0;padding:7px 9px;border-radius:11px}.header-chip b{font-size:8px}.header-chip small{font-size:8px}
  .module-nav{height:42px;padding:0 7px;overflow-x:auto}.module-tab{padding:0 13px;font-size:10.5px}.module-tag{display:none}
@@ -143,20 +140,21 @@ body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-col
  .panel h3{font-size:13px;padding:9px 12px}.panel h3 em{font-size:10px;padding:2px 8px}
  .pf{flex-direction:row;flex-wrap:wrap;padding:7px 9px;gap:6px}.pf .row{flex:1 1 100%}.pf .row.b{display:flex}
  #list{flex-direction:row;overflow-x:auto;overflow-y:hidden;padding:6px 8px}#list li{width:184px;min-width:184px;border-right:1px solid #edf1f8;border-bottom:1px solid #e9eef8;border-radius:14px;font-size:11px;min-height:52px;padding:9px 10px}
- #top{top:9px;left:9px;max-width:calc(100% - 18px);gap:8px}.kpis{gap:7px;width:100%}#kTotal{display:none}
+ #top{top:9px;left:9px;right:9px;gap:8px}#kTotal{display:none}
  .tc{flex:1 1 78px;min-width:78px;border-radius:13px;padding:8px 9px 8px 12px;gap:0}.tc::before{width:4px}.tc::after{display:none}
  .tc b{font-size:20px;margin-bottom:1px}.tc .lb{font-size:9.5px;white-space:normal;line-height:1.15}.tc .sub{display:none}
- .tc.add{flex:1 1 auto;padding:9px 12px;font-size:11px}.tc.exp{flex:0 0 auto;min-width:56px;padding:8px 9px}
- .toolrow{gap:7px}
- .dbar{padding:6px;gap:5px}.dbar button,.dbar input,.dbar select{font-size:10px;padding:5px}.seg button{padding:5px 7px;font-size:10px}
+ .tc.add{flex:1 1 130px;padding:9px 12px;font-size:11px}.tc.exp{flex:1 1 56px;min-width:56px;padding:8px 9px}
+ .dbar{flex:1 1 100%;padding:6px;gap:5px}.dbar button,.dbar input,.dbar select{font-size:10px;padding:5px}.seg button{padding:5px 7px;font-size:10px}
  #legend{bottom:10px;right:9px;left:auto;padding:8px 10px;font-size:10px;border-radius:13px}#legend label{margin:4px 0;gap:6px}
  #card{left:9px;right:9px;top:auto;bottom:204px;width:auto;max-height:56%;padding:14px;border-radius:18px}
- #src{left:9px;right:auto;top:auto;bottom:10px}#syncBadge{right:9px;bottom:46px;max-width:calc(100% - 18px)}
+ #src{left:9px;right:auto;top:auto;bottom:10px;max-width:calc(100% - 170px);overflow-wrap:anywhere}
+ #syncBadge{left:9px;right:auto;top:auto;bottom:42px;max-width:calc(100% - 170px);overflow-wrap:anywhere}
 }
 @media screen and (max-width:480px){
  .header-actions .header-chip:nth-child(2){display:none}.brand-title span{display:none}.brand-title{font-size:15px}.brand-subtitle{font-size:8px}
  #mapbox{bottom:188px}.panel{height:188px}#card{bottom:196px}
  .tc{flex:1 1 66px;min-width:66px;padding:7px 8px 7px 11px}.tc b{font-size:17px}.tc .lb{font-size:8.5px}.tc.exp{min-width:50px}
+ .tc.add{flex:1 1 110px}
  .dbar{max-height:104px;overflow:auto}
 }
 @media (hover:none) and (pointer:coarse){#list li{min-height:46px}.tc{min-height:40px}.pf select,.pf button{min-height:38px}}
@@ -203,18 +201,12 @@ body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-col
   <div id="mapbox">
     <div id="map"></div>
     <div id="top">
-      <div class="kpis" id="kpis">
-        <div class="tc" data-s="Active" style="--acc:#2563eb" title="Show or hide active leaks"><b id="n-Active">0</b><span class="lb">Active Leak</span><span class="sub">needs repair</span></div>
-        <div class="tc" data-s="Repair" style="--acc:#f59e0b" title="Show or hide leaks under ongoing repair"><b id="n-Repair">0</b><span class="lb">Ongoing Repair</span><span class="sub">crew assigned</span></div>
-        <div class="tc" data-s="Repaired" style="--acc:#10b981" title="Show or hide repaired leaks"><b id="n-Repaired">0</b><span class="lb">Repaired</span><span class="sub">closed out</span></div>
-        <div class="tc" data-s="Suspected" style="--acc:#8b5cf6" title="Show or hide suspected locations"><b id="n-Suspected">0</b><span class="lb">Suspected</span><span class="sub">to verify</span></div>
-        <div class="tc" id="kTotal" style="--acc:#0f1e42;cursor:default;flex:0 0 auto;min-width:120px" title="All records matching the current filters"><b id="n-Total">0</b><span class="lb">In This View</span><span class="sub" id="n-Open">&nbsp;</span></div>
-      </div>
-      <div class="toolrow">
-        <div class="tc add" id="add">＋ Add Leak</div>
-        <div class="tc exp" id="xcsv" title="Download the leaks currently shown (with GIS coordinates) as CSV"><b>⬇</b><span class="lb">CSV</span></div>
-        <div class="tc exp" id="xpng" title="Download the current map view with location tags as a PNG image"><b>🗺</b><span class="lb">Map PNG</span></div>
-      </div>
+      <div class="tc add" id="add">＋ Add Leak</div>
+      <div class="tc" data-s="Active" style="--acc:#2563eb" title="Show or hide active leaks"><b id="n-Active">0</b><span class="lb">Active Leak</span><span class="sub">needs repair</span></div>
+      <div class="tc" data-s="Repair" style="--acc:#f59e0b" title="Show or hide leaks under ongoing repair"><b id="n-Repair">0</b><span class="lb">Ongoing Repair</span><span class="sub">crew assigned</span></div>
+      <div class="tc" data-s="Repaired" style="--acc:#10b981" title="Show or hide repaired leaks"><b id="n-Repaired">0</b><span class="lb">Repaired</span><span class="sub">closed out</span></div>
+      <div class="tc" data-s="Suspected" style="--acc:#8b5cf6" title="Show or hide suspected locations"><b id="n-Suspected">0</b><span class="lb">Suspected</span><span class="sub">to verify</span></div>
+      <div class="tc" id="kTotal" style="--acc:#0f1e42;cursor:default" title="Every record matching the current filters"><b id="n-Total">0</b><span class="lb">Total Leaks</span><span class="sub" id="n-Open">&nbsp;</span></div>
       <div class="dbar" id="dbar">
         <button class="nav" id="dprev" title="Previous period">‹</button>
         <div class="seg" id="dseg"><button data-p="day">Day</button><button data-p="week">Week</button><button data-p="month">Month</button><button data-p="year">Year</button><button data-p="all" class="on">All</button></div>
@@ -223,6 +215,8 @@ body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-col
         <select id="dbasis" title="Which date to filter by"><option value="rep">By leak / POI date</option><option value="fix">By repair / repaired date</option></select>
         <span id="dmeta"><span id="dlabel">All dates</span><span id="dsum"></span></span>
       </div>
+      <div class="tc exp" id="xcsv" title="Download the leaks currently shown (with GIS coordinates) as CSV"><b>⬇</b><span class="lb">CSV</span></div>
+      <div class="tc exp" id="xpng" title="Download the current map view with location tags as a PNG image"><b>🗺</b><span class="lb">Map PNG</span></div>
     </div>
     <div id="legend">
       <div class="lg-t">Map layers</div>
@@ -371,8 +365,9 @@ function draw(){
   var base=leaks.filter(ok);
   STATUS_KEYS.forEach(function(s){$('n-'+s).textContent=base.filter(function(l){return l.status===s}).length});
   $('n-Total').textContent=base.length;
-  var open=base.filter(function(l){return l.status==='Active'||l.status==='Repair'}).length;
-  $('n-Open').textContent=open+' still open';
+  var fixed=base.filter(function(l){return l.status==='Repaired'}).length,
+      open=base.filter(function(l){return l.status==='Active'||l.status==='Repair'}).length;
+  $('n-Open').textContent=fixed+' repaired · '+open+' open';
   $('dlabel').textContent=plabel();
   $('dsum').textContent='· '+base.length+' record'+(base.length===1?'':'s');
   $('dpick').value=ymd(anchor);
@@ -448,9 +443,9 @@ function showAddForm(){
   };
 }
 $('add').onclick=showAddForm;
-function sync(s){var c=$('kpis').querySelector('.tc[data-s="'+s+'"]');if(c)c.classList.toggle('off',!shown[s]);var l=document.querySelector('.lay[value="'+s+'"]');if(l)l.checked=!!shown[s]}
+function sync(s){var c=$('top').querySelector('.tc[data-s="'+s+'"]');if(c)c.classList.toggle('off',!shown[s]);var l=document.querySelector('.lay[value="'+s+'"]');if(l)l.checked=!!shown[s]}
 STATUS_KEYS.forEach(function(s){sync(s)});
-document.querySelectorAll('#kpis .tc[data-s]').forEach(function(k){k.onclick=function(){var s=k.dataset.s;shown[s]=shown[s]?0:1;sync(s);draw()}});
+document.querySelectorAll('#top .tc[data-s]').forEach(function(k){k.onclick=function(){var s=k.dataset.s;shown[s]=shown[s]?0:1;sync(s);draw()}});
 document.querySelectorAll('.lay').forEach(function(c){c.onchange=function(){shown[c.value]=c.checked?1:0;sync(c.value);draw()}});
 document.querySelectorAll('[name=bm]').forEach(function(r){r.onchange=function(){map.removeLayer(sat);map.removeLayer(st);(r.value==='sat'?sat:st).addTo(map)}});
 $('fType').onchange=$('fSub').onchange=$('dbasis').onchange=draw;
@@ -535,9 +530,16 @@ function exportPNG(){
   catch(e){save(pngCanvas(false));toast('Basemap blocked by the browser — exported location tags only')}}
 $('xcsv').onclick=exportCSV;$('xpng').onclick=exportPNG;
 /* keep the map sized to its card on any zoom / resize (same as main reacts to browser zoom) */
-function fit(){map.invalidateSize()}
+function fit(){map.invalidateSize();syncTop()}
+/* The status bar wraps to more rows on narrow screens; the detail card follows whatever height it takes. */
+function syncTop(){
+  var top=$('top');if(!top)return;
+  var h=Math.ceil(top.getBoundingClientRect().height);
+  if(h>0)$('mapbox').style.setProperty('--topH',h+'px')}
 window.addEventListener('resize',fit);
 if(window.visualViewport)window.visualViewport.addEventListener('resize',fit);
-if(window.ResizeObserver)new ResizeObserver(fit).observe($('mapbox'));
+if(window.ResizeObserver){
+  new ResizeObserver(fit).observe($('mapbox'));
+  new ResizeObserver(syncTop).observe($('top'))}
 load();setNetworkState();setTimeout(fit,200);
 </script></body></html>
