@@ -110,19 +110,33 @@ html,body{margin:0;height:100vh;height:100dvh;overflow:hidden;font-family:'DM Sa
 #sv{margin-top:10px;width:100%;padding:11px;border:0;border-radius:12px;background:linear-gradient(120deg,#2563eb,#4f6ef7);color:#fff;font:800 11.5px 'DM Sans',sans-serif;cursor:pointer;box-shadow:0 8px 18px rgba(37,99,235,.3)}
 #sv:hover{filter:brightness(1.06)}
 #addForm{position:absolute;z-index:1150;left:50%;top:50%;transform:translate(-50%,-50%);width:432px;max-width:calc(100% - 24px);max-height:calc(100% - 24px);overflow:auto;display:none;background:rgba(255,255,255,.99);backdrop-filter:blur(10px);border:1px solid #dde5f6;border-radius:20px;box-shadow:0 24px 60px rgba(11,31,92,.35);padding:20px;font-size:12px}
+#repForm{position:absolute;z-index:1150;left:50%;top:50%;transform:translate(-50%,-50%);width:432px;max-width:calc(100% - 24px);max-height:calc(100% - 24px);overflow:auto;display:none;background:rgba(255,255,255,.99);backdrop-filter:blur(10px);border:1px solid #dde5f6;border-radius:20px;box-shadow:0 24px 60px rgba(11,31,92,.35);padding:20px;font-size:12px}
 #addForm h3{margin:0 0 5px;color:#0f2a72;font-size:17px;font-family:'Syne','DM Sans',sans-serif}
+#repForm h3{margin:0 0 5px;color:#0f2a72;font-size:17px;font-family:'Syne','DM Sans',sans-serif}
 #addForm .hint{color:#6b7b99;font-size:11px;line-height:1.55;margin:0 0 10px}
+#repForm .hint{color:#6b7b99;font-size:11px;line-height:1.55;margin:0 0 10px}
 #addForm label{display:block;font-size:11px;font-weight:700;color:#4c5f83;margin:10px 0 5px}
+#repForm label{display:block;font-size:11px;font-weight:700;color:#4c5f83;margin:10px 0 5px}
 #addForm input,#addForm select,#addForm textarea{width:100%;min-width:0;border:1px solid #d6e0f1;border-radius:11px;padding:10px;font:12px 'DM Sans',sans-serif;background:#fbfcff;color:#1c2f56}
+#repForm input,#repForm select,#repForm textarea{width:100%;min-width:0;border:1px solid #d6e0f1;border-radius:11px;padding:10px;font:12px 'DM Sans',sans-serif;background:#fbfcff;color:#1c2f56}
 #addForm input:focus,#addForm select:focus,#addForm textarea:focus{outline:none;border-color:#7d9bff;box-shadow:0 0 0 3px rgba(79,110,247,.16)}
+#repForm input:focus,#repForm select:focus,#repForm textarea:focus{outline:none;border-color:#7d9bff;box-shadow:0 0 0 3px rgba(79,110,247,.16)}
 #addForm .coordrow{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+#repForm .coordrow{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 #addForm .form-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+#repForm .form-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
 #addForm button{border:0;border-radius:11px;padding:11px 14px;font:700 11.5px 'DM Sans',sans-serif;cursor:pointer;transition:transform .15s,filter .15s}
+#repForm button{border:0;border-radius:11px;padding:11px 14px;font:700 11.5px 'DM Sans',sans-serif;cursor:pointer;transition:transform .15s,filter .15s}
 #addForm button:hover{transform:translateY(-1px)}
+#repForm button:hover{transform:translateY(-1px)}
 #addForm button:disabled{opacity:.55;cursor:wait;transform:none}
+#repForm button:disabled{opacity:.55;cursor:wait;transform:none}
 #addForm .primary{background:linear-gradient(120deg,#2563eb,#4f6ef7);color:#fff;box-shadow:0 8px 18px rgba(37,99,235,.3);flex:1}
+#repForm .primary{background:linear-gradient(120deg,#2563eb,#4f6ef7);color:#fff;box-shadow:0 8px 18px rgba(37,99,235,.3);flex:1}
 #addForm .secondary{background:#eef3ff;color:#1f3fae;flex:1}
+#repForm .secondary{background:#eef3ff;color:#1f3fae;flex:1}
 #addForm .closeform{float:right;background:#f0f4fb;color:#53688e;padding:8px 11px}
+#repForm .closeform{float:right;background:#f0f4fb;color:#53688e;padding:8px 11px}
 #gpsStatus{font-size:10.5px;color:#5b6b8c;margin-top:9px;line-height:1.5;overflow-wrap:anywhere;background:#f5f8ff;border:1px dashed #d5dff4;border-radius:11px;padding:9px 11px}
 #syncBadge{position:absolute;right:18px;top:52px;bottom:auto;z-index:1001;border-radius:11px;padding:8px 12px;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);border:1px solid #dde5f6;box-shadow:0 6px 18px rgba(16,42,110,.14);font-size:10px;font-weight:800;letter-spacing:.4px;color:#1f4bd0;max-width:calc(100% - 36px)}
 body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-color:#f7d9a8;background:#fff8ec}
@@ -164,6 +178,60 @@ body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-col
 }
 @media (hover:none) and (pointer:coarse){#list li{min-height:46px}.tc{min-height:40px}.pf select,.pf button{min-height:38px}}
 @supports (padding:max(0px)){#top{left:max(9px,env(safe-area-inset-left))}}
+
+/* ── ASTERRA EO Discover set-up: impact strip + insights ── */
+.header-chip.imp{min-width:104px;gap:2px;padding:9px 12px}
+.header-chip.imp small{font-size:9.5px;letter-spacing:.5px;text-transform:uppercase;color:#c9daff;order:-1}
+.header-chip.imp b{font-size:15px;letter-spacing:0;font-family:'Syne','DM Sans',sans-serif}
+@media (max-width:1250px){.header-context{display:none}}
+@media (max-width:900px){.header-actions{display:none}}
+.module-tab{cursor:pointer}
+#insights{display:none;position:absolute;inset:0;z-index:1300;overflow:auto;padding:18px;border-radius:0;
+  background:radial-gradient(1100px 620px at 6% -14%,#d8e5ff 0%,transparent 58%),var(--canvas)}
+.ins-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;max-width:1280px;margin:0 auto}
+.ic{background:#fff;border:1px solid #dde5f6;border-radius:18px;box-shadow:var(--shadow);padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.ic h4{margin:0;font-size:13px;color:#1d2f57;font-weight:700;display:flex;align-items:baseline;gap:8px}
+.ic h4 b{font-family:'Syne','DM Sans',sans-serif;font-size:30px;color:#0f1e42;letter-spacing:-.5px}
+.ic .ft{margin-top:auto;border-top:1px solid #e9eef9;padding-top:8px;font-size:11.5px;font-weight:700;color:#31456f}
+.ic .ft em{font-style:normal;color:#1f4bd0}
+.ic.wide{grid-column:1/-1}
+.ic small{color:#71809c;font-size:11px}
+.donut{width:112px;height:112px;border-radius:50%;margin:4px auto;position:relative;background:#e4eaf7}
+.donut::after{content:'';position:absolute;inset:20px;border-radius:50%;background:#fff}
+.dlg{display:flex;gap:14px;justify-content:center;font-size:10.5px;font-weight:700;color:#31456f}
+.dlg i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px}
+.tline{display:flex;align-items:flex-end;gap:10px;height:150px;padding-top:6px}
+.tcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;min-width:0}
+.tbars{display:flex;align-items:flex-end;gap:3px;height:100%;width:100%;justify-content:center}
+.tbars span{flex:0 1 14px;border-radius:4px 4px 0 0;min-height:2px;position:relative}
+.tcol small{font-size:9.5px;font-weight:700;color:#8c9ab4}
+.imp-f{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.imp-f label{display:block;font-size:10.5px;color:#71809c;margin-bottom:3px;font-weight:700}
+.imp-f select,.imp-f input{width:100%;border:1px solid #dbe4f2;border-radius:10px;padding:8px;font:inherit;background:#fbfcff}
+
+/* ── Repair log & cost form ── */
+#repForm{width:580px}
+#repForm .phrow{display:grid;grid-template-columns:1fr 62px auto 62px auto;gap:6px;align-items:center;margin-top:6px}
+#repForm .phrow span{font-weight:700;color:#31456f}
+#repForm .phrow em{font-style:normal;color:#8c9ab4;font-size:11px}
+#repForm .rf-tot{margin:12px 0 4px;padding:10px 12px;border-radius:12px;background:#f0f5ff;color:#1d2f57;font-weight:700;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+#repForm .rf-sec{margin:14px 0 4px;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#8c9ab4}
+#repForm .rf-h,#repForm .rf-g{display:grid;grid-template-columns:1.7fr .6fr .7fr .8fr 30px;gap:6px;align-items:center}
+#repForm .rf-h span{font-size:9.5px;font-weight:700;color:#8c9ab4}
+#repForm .rf-row{margin-top:6px}
+#repForm .rf-cost{font-size:10.5px;color:#71809c;text-align:right;margin-top:2px}
+#repForm .rf-x{background:#f0f4fb;color:#c0392b;padding:8px 0}
+#repForm .rf-add{margin-top:8px;flex:none;padding:8px 12px}
+#repForm .rf-sum{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+#repForm .rf-sum div{border:1px solid #e2e9fa;border-radius:12px;padding:8px 10px;background:#f6f8ff}
+#repForm .rf-sum small{display:block;font-size:10px;color:#71809c}#repForm .rf-sum b{font-size:15px}
+#repForm .rf-warn{color:#b45309;font-size:10.5px;margin-top:4px}
+.rsum{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px;text-align:center}
+.rsum small{display:block;font-size:9px;color:#71809c}.rsum b{font-size:12px;color:#17306a}
+.rbtn{width:100%;border:0;border-radius:11px;padding:10px;font:700 11.5px 'DM Sans',sans-serif;cursor:pointer;color:#fff;background:linear-gradient(120deg,#2563eb,#4f6ef7)}
+.phb{display:grid;grid-template-columns:110px 1fr 56px;gap:8px;align-items:center;font-size:11px;font-weight:700;color:#31456f;margin:5px 0}
+.phb div{height:9px;background:#e9eef9;border-radius:6px;overflow:hidden}.phb i{display:block;height:100%;background:linear-gradient(90deg,#2563eb,#8b5cf6)}
+.phb b{text-align:right;font-size:11px}
 </style></head><body>
 <header class="app-header">
   <div class="brand-block">
@@ -175,13 +243,17 @@ body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-col
     <span class="live-dot"></span><span>GIS MONITORING</span>
     <span class="context-divider"></span><span>District View</span>
   </div>
-  <div class="header-actions">
-    <span class="header-chip"><b>REPAIR WORKFLOW</b><small>Active · Ongoing · Repaired</small></span>
-    <span class="header-chip"><b>GIS + FIELD DATA</b><small>Offline-ready records</small></span>
+  <div class="header-actions" id="impact" aria-label="Impact of repaired leaks">
+    <span class="header-chip imp" title="Repaired leaks: est. loss (m³/day) × days since repair"><small>Water saved</small><b id="imWater">0 m³</b></span>
+    <span class="header-chip imp"><small>Water cost savings</small><b id="imWaterCost">₱0</b></span>
+    <span class="header-chip imp"><small>Energy saved</small><b id="imEnergy">0 kWh</b></span>
+    <span class="header-chip imp"><small>Energy cost savings</small><b id="imEnergyCost">₱0</b></span>
+    <span class="header-chip imp"><small>GHG reduction</small><b id="imCo2">0 kg CO₂</b></span>
   </div>
 </header>
 <nav class="module-nav" aria-label="Dashboard modules">
-  <div class="module-tab active">Map Overview</div>
+  <div class="module-tab active" id="tabMap" role="button" tabindex="0">Map Overview</div>
+  <div class="module-tab" id="tabIns" role="button" tabindex="0">Insights</div>
   <div class="module-tab">Data Release</div>
   <div class="module-tab">Segments</div>
   <div class="module-tab">Results</div>
@@ -191,6 +263,24 @@ body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-col
   <div class="module-tag">AGUS · NRW</div>
 </nav>
 <div id="dash">
+  <div id="insights" role="region" aria-label="Leak insights">
+    <div class="ins-grid">
+      <div class="ic"><h4><b id="ixFound">0</b>Leaks found</h4><div class="donut" id="ixDonut"></div>
+        <div class="dlg"><span><i style="background:#0f1e42"></i>Surfaced <b id="ixSurf">0</b></span><span><i style="background:#2563eb"></i>Non-surfacing <b id="ixNon">0</b></span></div>
+        <div class="ft"><em id="ixPct">–</em> non-surfacing leaks <small id="ixUnk"></small></div></div>
+      <div class="ic"><h4><b id="ixCrew">–</b>Leaks per field day</h4><small>Leaks found ÷ distinct days with leak, repair-start or repaired activity.</small>
+        <div class="ft"><em id="ixDays">0</em> field days</div></div>
+      <div class="ic"><h4><b id="ixKm">–</b>Leaks per km</h4><small>Leaks found ÷ pipe network length loaded in this map.</small>
+        <div class="ft"><em id="ixNet">0</em> km of pipe</div></div>
+      <div class="ic"><h4><b id="ixTat">–</b>Avg. repair time (days)</h4><small>Leak date to repaired date, repaired leaks only.</small>
+        <div class="ft"><em id="ixOpen">0</em> still open</div></div>
+      <div class="ic"><h4><b id="ixCost">₱0</b>Repair cost</h4><small id="ixCostSub">No repair logs yet</small>
+        <div class="ft">Manpower <em id="ixMan">₱0</em> · Fittings <em id="ixFitC">₱0</em></div></div>
+      <div class="ic"><h4>Average time per phase</h4><div id="ixPh"></div><div class="ft"><em id="ixLogN">0</em> repair logs</div></div>
+      <div class="ic wide"><h4>Found vs repaired · last 12 months</h4><div class="tline" id="ixLine"></div>
+        <div class="dlg"><span><i style="background:#dc2626"></i>Found</span><span><i style="background:#10b981"></i>Repaired</span></div></div>
+    </div>
+  </div>
   <aside class="panel">
     <h3>💧 Leak Locations <em id="listCount">0 records</em></h3>
     <div class="pf">
@@ -242,7 +332,7 @@ body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-col
       <label><input type="checkbox" id="pipesChk7" class="pmat" data-m="Unknown" checked><i class="dot" style="background:#94a3b8;border:1px solid #64748b"></i> Unknown</label>
       <div id="pipeInfo"></div>
     </div>
-    <div id="src"></div><div id="syncBadge" aria-live="polite">Checking sync status…</div><div id="card"></div><div id="addForm" role="dialog" aria-modal="true" aria-label="Record leak location"></div><div id="msg" role="status" aria-live="polite"></div>
+    <div id="src"></div><div id="syncBadge" aria-live="polite">Checking sync status…</div><div id="card"></div><div id="addForm" role="dialog" aria-modal="true" aria-label="Record leak location"></div><div id="repForm" role="dialog" aria-modal="true" aria-label="Repair log and cost"></div><div id="msg" role="status" aria-live="polite"></div>
   </div>
 </div>
 <script>
@@ -315,6 +405,7 @@ function initPipeLayer(){
   });
   pipeLayer.addTo(map);
   applyPipeFilter();
+  try{renderKpis(leaks.filter(ok))}catch(e){}
 }
 /* Material checkboxes dim/hide pipes; leak markers, counts and exports stay untouched. */
 function applyPipeFilter(){
@@ -352,6 +443,7 @@ function normalize(l){
   /* Unrecognised or empty status: fall back to the dates already on the record. */
   l.status=n||(STATUS[s]?s:(l.repaired?'Repaired':(l.leak?'Active':'Suspected')));
   if(!l.repairStart)l.repairStart=l.repairing||l.repairDate||l.repair_started||'';
+  var x=EXTRA&&EXTRA[l.id];if(x){if(l.flow===undefined||l.flow===null||l.flow==='')l.flow=x.flow;if(!l.surfaced)l.surfaced=x.surfaced}
   return l}
 function mergeById(primary,secondary){var out=[],idx={};(primary||[]).concat(secondary||[]).forEach(function(l){if(!l||!l.id||!Number.isFinite(Number(l.lat))||!Number.isFinite(Number(l.lng)))return;l=normalize(l);var key=String(l.id);if(Object.prototype.hasOwnProperty.call(idx,key))out[idx[key]]=l;else{idx[key]=out.length;out.push(l)}});return out}
 function updateSyncBadge(){var b=$('syncBadge');if(!b)return;var n=getPending().length;if(!navigator.onLine){b.textContent='OFFLINE · '+n+' pending';b.style.display='block';b.style.opacity='1';b.style.transition='none'}else if(n){b.textContent='SYNC PENDING · '+n;b.style.display='block';b.style.opacity='1';b.style.transition='none'}else{b.textContent='SYNCED · no pending records';b.style.display='block';b.style.opacity='.82'}
@@ -466,7 +558,8 @@ function draw(){
     var li=document.createElement('li');
     li.innerHTML='<i class="dot '+clsOf(l.status)+'"></i><div><b>'+l.id+'</b><small>'+(l.address||l.type||'')+(l.status==='Repair'&&l.repairStart?' · since '+dnorm(l.repairStart):'')+'</small></div><span class="st" style="background:'+COLORS(l.status)+'">'+labelOf(l.status)+'</span>';
     li.onclick=function(){map.flyTo([l.lat,l.lng],18,{duration:.7});show(l)};ul.appendChild(li)});
-  if(!vis.length){var e=document.createElement('li');e.className='empty';e.textContent=query()?'No records match your search':'No leaks to show';ul.appendChild(e)}}
+  if(!vis.length){var e=document.createElement('li');e.className='empty';e.textContent=query()?'No records match your search':'No leaks to show';ul.appendChild(e)}
+  try{renderKpis(base)}catch(err){console.warn('KPI render',err)}}
 /* Workflow moves a record forward or back: Active Leak → Ongoing Repair → Repaired. */
 function setStatus(l,s){
   var now=today();
@@ -483,17 +576,18 @@ function show(l){
    +'<div><b>Address:</b> '+esc(l.address||'—')+'<br><b>Pipe Type:</b> '+esc(l.pipe||'—')+'<br><b>Coords:</b> '+Number(l.lat).toFixed(5)+', '+Number(l.lng).toFixed(5)+'</div>'
    +'<div class="tl"><div><i class="on"></i>POI<br>'+esc(l.poi||'—')+'</div><div><i class="'+(l.leak?'on':'')+'"></i>Leak<br>'+esc(l.leak||'—')+'</div><div><i class="'+(l.repairStart?(st==='Repair'?'now':'on'):'')+'"></i>Repair start<br>'+esc(l.repairStart||'—')+'</div><div><i class="'+(l.repaired?'on':'')+'"></i>Repaired<br>'+esc(l.repaired||'—')+'</div></div>'
    +'<div class="g"><div><small>Leak Type</small><b>'+esc(l.type||'—')+'</b></div><div><small>Sub Type</small><b>'+esc(l.sub||'—')+'</b></div></div>'
-   +'<div class="wf"><div class="wf-lb">Repair workflow</div><div class="steps" id="steps"></div>'
+   +impactFields(l)+'<div class="wf"><div class="wf-lb">Repair workflow</div><div class="steps" id="steps"></div>'
    +'<div class="wf-hint">Active Leak → Ongoing Repair → Repaired. Choosing a step saves on this device first and syncs when connected.</div></div>'
-   +'<small style="display:block;margin-bottom:4px;color:#71809c">Comments</small><textarea id="cm" rows="3">'+esc(l.comments||'')+'</textarea>'
-   +'<button id="sv" type="button">Save comments</button>';
+   +repairSummary(l)+'<small style="display:block;margin-bottom:4px;color:#71809c">Comments</small><textarea id="cm" rows="3">'+esc(l.comments||'')+'</textarea>'
+   +'<button id="sv" type="button">Save details</button>';
   var box=$('steps'), html='';
   STEP_KEYS.forEach(function(s){
     var on=s===st;
     html+='<button class="step'+(on?' on':'')+'" type="button" data-s="'+s+'" style="'+(on?'background:'+COLORS(s):'')+'" title="Set status to '+labelOf(s)+'"><i></i>'+labelOf(s)+'</button>'});
   box.innerHTML=html;
   Array.prototype.forEach.call(box.children,function(b){b.onclick=function(){setStatus(l,b.dataset.s)}});
-  $('sv').onclick=function(){l.comments=$('cm').value;save(l);draw();show(l);toast('Comments saved')}
+  var rb=$('rlog');if(rb)rb.onclick=function(){openRepairForm(l)};
+  $('sv').onclick=function(){l.comments=$('cm').value;readImpactFields(l);save(l);draw();show(l);toast('Details saved')}
 }
 map.on('click',function(e){
   if(!adding)return;
@@ -542,6 +636,176 @@ $('dprev').onclick=function(){shift(-1)};$('dnext').onclick=function(){shift(1)}
 $('dpick').onchange=function(){if(this.value){var p=this.value.split('-');anchor=new Date(+p[0],+p[1]-1,+p[2]);if(per==='all')per='day';draw()}};
 $('reset').onclick=function(){$('fType').value=$('fSub').value=$('q').value='';per='all';anchor=new Date();anchor.setHours(0,0,0,0);$('dbasis').value='rep';shown={Active:1,Repair:1,Repaired:1,Suspected:1};STATUS_KEYS.forEach(sync);draw()};
 
+/* ── ASTERRA EO Discover set-up: impact KPIs + insights ── */
+/* PLACEHOLDERS — replace with CWD's real figures. */
+var CFG={WATER_VALUE:17,KWH_PER_M3:0.4,TARIFF:10,KG_CO2_PER_KWH:0.7};
+var EXTRA_KEY='agus_leak_extra_v1',EXTRA=safeRead(EXTRA_KEY,{});if(!EXTRA||typeof EXTRA!=='object'||Array.isArray(EXTRA))EXTRA={};
+function num(v){v=Number(v);return isFinite(v)?v:0}
+function compact(n){n=Math.round(n);var a=Math.abs(n);return a>=1e6?(n/1e6).toFixed(2)+'M':a>=1e4?(n/1e3).toFixed(1)+'k':n.toLocaleString()}
+function impactFields(l){var s=l.surfaced||'';
+  return '<div class="imp-f"><div><label for="sf">Surfacing?</label><select id="sf"><option value="">Unknown</option><option'+(s==='Surfaced'?' selected':'')+'>Surfaced</option><option'+(s==='Non-surfacing'?' selected':'')+'>Non-surfacing</option></select></div>'
+   +'<div><label for="fl">Est. loss (m³/day)</label><input id="fl" type="number" min="0" step="any" inputmode="decimal" value="'+esc(l.flow===undefined||l.flow===null?'':l.flow)+'"></div></div>'}
+function readImpactFields(l){var sf=$('sf'),fl=$('fl');if(!sf||!fl)return;
+  l.surfaced=sf.value;l.flow=fl.value===''?'':num(fl.value);
+  EXTRA[l.id]={surfaced:l.surfaced,flow:l.flow};safeWrite(EXTRA_KEY,EXTRA)}
+function savings(base){var m3=0,t=Date.now();
+  base.forEach(function(l){if(l.status!=='Repaired'||!l.repaired||!num(l.flow))return;var d=(t-Date.parse(dnorm(l.repaired)))/864e5;if(d>0)m3+=num(l.flow)*d});
+  var kwh=m3*CFG.KWH_PER_M3;return{m3:m3,wc:m3*CFG.WATER_VALUE,kwh:kwh,ec:kwh*CFG.TARIFF,co2:kwh*CFG.KG_CO2_PER_KWH}}
+function dayDiff(a,b){return Math.round((Date.parse(b)-Date.parse(a))/864e5)}
+function renderKpis(base){
+  var v=savings(base);
+  $('imWater').textContent=compact(v.m3)+' m³';$('imWaterCost').textContent='₱'+compact(v.wc);
+  $('imEnergy').textContent=compact(v.kwh)+' kWh';$('imEnergyCost').textContent='₱'+compact(v.ec);$('imCo2').textContent=compact(v.co2)+' kg CO₂';
+  var found=base.filter(function(l){return l.status!=='Suspected'});
+  var surf=found.filter(function(l){return l.surfaced==='Surfaced'}).length,non=found.filter(function(l){return l.surfaced==='Non-surfacing'}).length,cls=surf+non;
+  var pct=cls?Math.round(non/cls*100):0;
+  $('ixFound').textContent=found.length;$('ixSurf').textContent=surf;$('ixNon').textContent=non;
+  $('ixPct').textContent=cls?pct+'%':'–';$('ixUnk').textContent=found.length-cls?'· '+(found.length-cls)+' not classified yet':'';
+  $('ixDonut').style.background=cls?'conic-gradient(#2563eb 0 '+pct+'%,#0f1e42 '+pct+'% 100%)':'#e4eaf7';
+  var days={};found.forEach(function(l){[l.leak,l.repairStart,l.repaired].forEach(function(d){d=dnorm(d);if(d)days[d]=1})});
+  var fd=Object.keys(days).length,km=(pipeStats.len||0)/1000;
+  $('ixDays').textContent=fd;$('ixCrew').textContent=fd?(found.length/fd).toFixed(1):'–';
+  $('ixNet').textContent=km?km.toFixed(1):'0';$('ixKm').textContent=km?(found.length/km).toFixed(2):'–';
+  var tat=base.filter(function(l){return l.status==='Repaired'&&dnorm(l.leak)&&dnorm(l.repaired)}).map(function(l){return dayDiff(dnorm(l.leak),dnorm(l.repaired))}).filter(function(d){return d>=0});
+  $('ixTat').textContent=tat.length?(tat.reduce(function(a,b){return a+b},0)/tat.length).toFixed(1):'–';
+  $('ixOpen').textContent=base.filter(function(l){return l.status==='Active'||l.status==='Repair'}).length;
+  var now=new Date(),cols=[],i;for(i=11;i>=0;i--){var d=new Date(now.getFullYear(),now.getMonth()-i,1);cols.push({k:d.getFullYear()+'-'+pad(d.getMonth()+1),m:MONTHS[d.getMonth()].slice(0,3),f:0,r:0})}
+  base.forEach(function(l){var f=dnorm(l.leak),r=dnorm(l.repaired);cols.forEach(function(c){if(l.status!=='Suspected'&&f&&f.slice(0,7)===c.k)c.f++;if(l.status==='Repaired'&&r&&r.slice(0,7)===c.k)c.r++})});
+  var mx=Math.max.apply(null,cols.map(function(c){return Math.max(c.f,c.r)}).concat([1]));
+  $('ixLine').innerHTML=cols.map(function(c){return '<div class="tcol"><div class="tbars"><span title="Found '+c.f+'" style="height:'+(c.f/mx*100)+'%;background:#dc2626"></span><span title="Repaired '+c.r+'" style="height:'+(c.r/mx*100)+'%;background:#10b981"></span></div><small>'+c.m+'</small></div>'}).join('')}
+function showTab(t){var ins=t==='ins';$('insights').style.display=ins?'block':'none';
+  $('tabIns').classList.toggle('active',ins);$('tabMap').classList.toggle('active',!ins);if(!ins)setTimeout(fit,30)}
+[['tabMap','map'],['tabIns','ins']].forEach(function(p){var el=$(p[0]);el.onclick=function(){showTab(p[1])};el.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();showTab(p[1])}}});
+
+/* ── Repair log: 4 phases (locate · excavate · repair · restore) + manpower & fittings cost ── */
+var REP_KEY='agus_repair_v1',REPQ_KEY='agus_repair_outbox_v1',CAT_KEY='agus_catalog_v1';
+var REP=safeRead(REP_KEY,{}),CAT=safeRead(CAT_KEY,{manpower:[],fittings:[]}),repBusy=false,RF=null;
+if(!REP||typeof REP!=='object'||Array.isArray(REP))REP={};
+if(!CAT||!Array.isArray(CAT.manpower)||!Array.isArray(CAT.fittings))CAT={manpower:[],fittings:[]};
+var PHASES=[['loc','1 · Locate leak'],['exc','2 · Excavation'],['rep','3 · Repair'],['res','4 · Restoration']];
+function peso(n){return '₱'+Math.round(num(n)).toLocaleString()}
+function fdur(m){m=Math.round(num(m));if(!m)return '0m';var h=Math.floor(m/60),r=m%60;return ((h?h+'h ':'')+(r||!h?r+'m':'')).trim()}
+function r2(n){return Math.round(num(n)*100)/100}
+function toLocalInput(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes())}
+function repTotals(r){var tm=0,m=0,f=0,p=r.ph||{};PHASES.forEach(function(x){tm+=num(p[x[0]])});
+  (r.crew||[]).forEach(function(c){m+=num(c.n)*num(c.h)*num(c.rate)});(r.fit||[]).forEach(function(c){f+=num(c.qty)*num(c.price)});
+  return{min:tm,man:m,fit:f,total:m+f}}
+function endOf(start,min){var d=new Date(start);if(isNaN(d))return '';d=new Date(d.getTime()+num(min)*60000);return toLocalInput(d)}
+function findRole(n){n=String(n||'').trim().toLowerCase();return CAT.manpower.filter(function(r){return String(r.role).toLowerCase()===n})[0]}
+function findFit(n){n=String(n||'').trim().toLowerCase();return CAT.fittings.filter(function(r){return String(r.item).toLowerCase()===n})[0]}
+function repCsv(l){var r=REP[l.id];if(!r)return ['','','','','','','','',''];var t=repTotals(r),p=r.ph||{};
+  return [r.start.replace('T',' '),num(p.loc),num(p.exc),num(p.rep),num(p.res),t.min,r2(t.man),r2(t.fit),r2(t.total)]}
+function repairSummary(l){var r=REP[l.id],t=r?repTotals(r):null;
+  return '<div class="wf"><div class="wf-lb">Repair time &amp; cost</div>'+(r
+   ?'<div class="rsum"><div><small>Total time</small><b>'+fdur(t.min)+'</b></div><div><small>Manpower</small><b>'+peso(t.man)+'</b></div><div><small>Fittings</small><b>'+peso(t.fit)+'</b></div><div><small>Total cost</small><b>'+peso(t.total)+'</b></div></div>'
+   :'<div class="wf-hint" style="margin:0 0 8px">No repair log yet. Record the start time, the four phase durations, crew and fittings used.</div>')
+   +'<button id="rlog" class="rbtn" type="button">'+(r?'Edit repair log':'⏱ Log repair time &amp; cost')+'</button></div>'}
+
+/* form */
+function openRepairForm(l){
+  var r=REP[l.id],d=new Date();d.setSeconds(0,0);
+  RF={id:l.id,leak:l,start:(r&&r.start)||toLocalInput(d),ph:{loc:0,exc:0,rep:0,res:0},crew:[],fit:[]};
+  if(r){PHASES.forEach(function(x){RF.ph[x[0]]=num((r.ph||{})[x[0]])});RF.crew=JSON.parse(JSON.stringify(r.crew||[]));RF.fit=JSON.parse(JSON.stringify(r.fit||[]))}
+  var f=$('repForm'),h='<button class="closeform" id="rfClose" type="button" aria-label="Close form">✕</button><h3>⏱ Repair log &amp; cost</h3>'
+   +'<p class="hint">Leak '+esc(l.id)+' · saved on this device first, then synced to Google Sheets. You can save after each phase and come back to finish.</p>'
+   +'<label for="rfStart">Start · leak detected</label><input id="rfStart" type="datetime-local" value="'+esc(RF.start)+'">'
+   +'<div class="rf-sec">Time spent per phase</div>';
+  PHASES.forEach(function(x){var m=num(RF.ph[x[0]]);
+    h+='<div class="phrow"><span>'+x[1]+'</span><input type="number" min="0" step="1" inputmode="numeric" data-ph="'+x[0]+'" data-u="h" value="'+(m?Math.floor(m/60):'')+'" aria-label="'+x[1]+' hours" placeholder="0"><em>h</em><input type="number" min="0" step="1" inputmode="numeric" data-ph="'+x[0]+'" data-u="m" value="'+(m?m%60:'')+'" aria-label="'+x[1]+' minutes" placeholder="0"><em>min</em></div>'});
+  h+='<div class="rf-tot"><span>Total duration <b id="rfTot">0m</b></span><span>Finished <b id="rfEnd">–</b></span></div>'
+   +'<div class="rf-sec">Manpower</div><div class="rf-h"><span>Role</span><span>Crew</span><span>Hours</span><span>₱ / hour</span><span></span></div><div id="rfCrew"></div>'
+   +'<button class="secondary rf-add" id="rfAddC" type="button">＋ Add crew</button>'
+   +'<div class="rf-sec">Fittings used</div><div class="rf-h"><span>Item</span><span>Qty</span><span>Unit</span><span>₱ / unit</span><span></span></div><div id="rfFit"></div>'
+   +'<button class="secondary rf-add" id="rfAddF" type="button">＋ Add fitting</button>'
+   +'<div class="rf-sum"><div><small>Manpower</small><b id="rfMan">₱0</b></div><div><small>Fittings</small><b id="rfFitT">₱0</b></div><div><small>Total cost</small><b id="rfTotC">₱0</b></div></div>'
+   +'<div class="rf-warn" id="rfWarn"></div>'
+   +'<datalist id="dlRoles">'+CAT.manpower.map(function(r){return '<option value="'+esc(r.role)+'">'}).join('')+'</datalist>'
+   +'<datalist id="dlFit">'+CAT.fittings.map(function(r){return '<option value="'+esc(r.item)+'">'}).join('')+'</datalist>'
+   +'<div class="form-actions"><button class="primary" id="rfSave" type="button">Save repair log</button><button class="secondary" id="rfCancel" type="button">Cancel</button></div>';
+  f.innerHTML=h;f.style.display='block';rfRows();rfCalc()}
+function rfRows(){
+  $('rfCrew').innerHTML=RF.crew.map(function(c,i){return '<div class="rf-row"><div class="rf-g"><input list="dlRoles" data-c="role" data-i="'+i+'" value="'+esc(c.role||'')+'" placeholder="e.g. Plumber" aria-label="Role">'
+   +'<input type="number" min="0" step="1" inputmode="numeric" data-c="n" data-i="'+i+'" value="'+esc(c.n)+'" aria-label="Crew count">'
+   +'<input type="number" min="0" step="any" inputmode="decimal" data-c="h" data-i="'+i+'" value="'+esc(c.h)+'" aria-label="Hours">'
+   +'<input type="number" min="0" step="any" inputmode="decimal" data-c="rate" data-i="'+i+'" value="'+esc(c.rate)+'" aria-label="Rate per hour">'
+   +'<button class="rf-x" type="button" data-del="c:'+i+'" aria-label="Remove crew line">✕</button></div><div class="rf-cost" id="cc'+i+'"></div></div>'}).join('');
+  $('rfFit').innerHTML=RF.fit.map(function(c,i){return '<div class="rf-row"><div class="rf-g"><input list="dlFit" data-f="item" data-i="'+i+'" value="'+esc(c.item||'')+'" placeholder="e.g. Repair clamp" aria-label="Fitting">'
+   +'<input type="number" min="0" step="any" inputmode="decimal" data-f="qty" data-i="'+i+'" value="'+esc(c.qty)+'" aria-label="Quantity">'
+   +'<input data-f="unit" data-i="'+i+'" value="'+esc(c.unit||'')+'" placeholder="pc" aria-label="Unit">'
+   +'<input type="number" min="0" step="any" inputmode="decimal" data-f="price" data-i="'+i+'" value="'+esc(c.price)+'" aria-label="Price per unit">'
+   +'<button class="rf-x" type="button" data-del="f:'+i+'" aria-label="Remove fitting line">✕</button></div><div class="rf-cost" id="fc'+i+'"></div></div>'}).join('')}
+function rfSet(a,f,i,v){var el=$('repForm').querySelector('[data-'+a+'="'+f+'"][data-i="'+i+'"]');if(el)el.value=v}
+function rfCalc(){
+  var t=repTotals(RF);$('rfTot').textContent=fdur(t.min);$('rfEnd').textContent=t.min&&RF.start?endOf(RF.start,t.min).replace('T',' '):'–';
+  RF.crew.forEach(function(c,i){if(c.hAuto){c.h=r2(t.min/60);rfSet('c','h',i,c.h)}var e=$('cc'+i);if(e)e.textContent=peso(num(c.n)*num(c.h)*num(c.rate))});
+  RF.fit.forEach(function(c,i){var e=$('fc'+i);if(e)e.textContent=peso(num(c.qty)*num(c.price))});
+  t=repTotals(RF);$('rfMan').textContent=peso(t.man);$('rfFitT').textContent=peso(t.fit);$('rfTotC').textContent=peso(t.total);
+  var miss=RF.crew.filter(function(c){return c.role&&!num(c.rate)}).length+RF.fit.filter(function(c){return c.item&&!num(c.price)}).length;
+  $('rfWarn').textContent=miss?miss+' line'+(miss>1?'s have':' has')+' no rate / price yet — fill the Manpower or Fittings sheet, or type it in.':''}
+function rfClose(){$('repForm').style.display='none';$('repForm').innerHTML='';RF=null}
+function rfSave(){
+  if(!RF.start){toast('Enter the start time when the leak was detected');$('rfStart').focus();return}
+  var l=RF.leak,t=repTotals(RF);
+  var crew=RF.crew.filter(function(c){return String(c.role||'').trim()}).map(function(c){return{role:String(c.role).trim(),n:num(c.n),h:num(c.h),rate:num(c.rate),cost:r2(num(c.n)*num(c.h)*num(c.rate))}});
+  var fit=RF.fit.filter(function(c){return String(c.item||'').trim()}).map(function(c){return{item:String(c.item).trim(),unit:String(c.unit||'').trim(),qty:num(c.qty),price:num(c.price),cost:r2(num(c.qty)*num(c.price))}});
+  var rec={id:RF.id,start:RF.start,ph:{loc:num(RF.ph.loc),exc:num(RF.ph.exc),rep:num(RF.ph.rep),res:num(RF.ph.res)},crew:crew,fit:fit,min:t.min,end:endOf(RF.start,t.min),man:r2(t.man),fitCost:r2(t.fit),total:r2(t.total),updated:new Date().toISOString()};
+  REP[rec.id]=rec;safeWrite(REP_KEY,REP);
+  var q=safeRead(REPQ_KEY,[]);if(!Array.isArray(q))q=[];if(q.indexOf(rec.id)<0)q.push(rec.id);safeWrite(REPQ_KEY,q);
+  rfClose();draw();show(l);syncRepairs();
+  toast(navigator.onLine&&GAS_URL?'Repair log saved · syncing':'Repair log saved on this device')}
+$('repForm').addEventListener('input',function(e){var t=e.target;if(!RF)return;
+  if(t.id==='rfStart'){RF.start=t.value}
+  else if(t.dataset.ph){var k=t.dataset.ph,q=$('repForm').querySelector.bind($('repForm'));
+    RF.ph[k]=Math.max(0,num(q('[data-ph="'+k+'"][data-u="h"]').value))*60+Math.max(0,num(q('[data-ph="'+k+'"][data-u="m"]').value))}
+  else if(t.dataset.c){var c=RF.crew[+t.dataset.i],f=t.dataset.c;
+    if(f==='role'){c.role=t.value;var m=findRole(t.value);if(m){c.rate=num(m.hourly);rfSet('c','rate',t.dataset.i,c.rate)}}
+    else{c[f]=t.value===''?'':num(t.value);if(f==='h')c.hAuto=false}}
+  else if(t.dataset.f){var x=RF.fit[+t.dataset.i],g=t.dataset.f;
+    if(g==='item'){x.item=t.value;var m2=findFit(t.value);if(m2){x.unit=m2.unit||x.unit;x.price=num(m2.price);rfSet('f','unit',t.dataset.i,x.unit||'');rfSet('f','price',t.dataset.i,x.price)}}
+    else if(g==='unit'){x.unit=t.value}else{x[g]=t.value===''?'':num(t.value)}}
+  else return;
+  rfCalc()});
+$('repForm').addEventListener('click',function(e){var b=e.target.closest('button');if(!b||!RF)return;
+  if(b.id==='rfClose'||b.id==='rfCancel')rfClose();
+  else if(b.id==='rfSave')rfSave();
+  else if(b.id==='rfAddC'){RF.crew.push({role:'',n:1,h:r2(repTotals(RF).min/60),rate:0,hAuto:true});rfRows();rfCalc()}
+  else if(b.id==='rfAddF'){RF.fit.push({item:'',qty:1,unit:'',price:0});rfRows();rfCalc()}
+  else if(b.dataset.del){var p=b.dataset.del.split(':');(p[0]==='c'?RF.crew:RF.fit).splice(+p[1],1);rfRows();rfCalc()}});
+
+/* sync: repair logs are upserted by leak ID on the server; the outbox keeps them until the server confirms */
+function syncRepairs(){
+  if(repBusy||!GAS_URL||!navigator.onLine)return;
+  var q=safeRead(REPQ_KEY,[]);if(!Array.isArray(q)||!q.length)return;
+  var id=q[0],rec=REP[id];if(!rec){safeWrite(REPQ_KEY,q.slice(1));return syncRepairs()}
+  repBusy=true;
+  fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'saveRepair',repair:rec})})
+   .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()})
+   .then(function(body){var res=null;try{res=JSON.parse(body)}catch(e){}
+     if(!res||res.success!==true)throw new Error(res&&res.message||'Server did not confirm');
+     var cur=safeRead(REPQ_KEY,[]);safeWrite(REPQ_KEY,(Array.isArray(cur)?cur:[]).filter(function(x){return x!==id}));
+     repBusy=false;updateSourceLabel('Connected · Google Sheets');syncRepairs()})
+   .catch(function(err){repBusy=false;updateSourceLabel('Repair log saved on device · server not confirmed');
+     console.warn('Repair sync:',err&&err.message);setTimeout(syncRepairs,60000)})}
+function loadCatalog(){if(!GAS_URL||!navigator.onLine)return;
+  fetch(GAS_URL+'?action=catalog').then(function(r){return r.json()}).then(function(d){
+    if(d&&Array.isArray(d.manpower)&&Array.isArray(d.fittings)){CAT={manpower:d.manpower,fittings:d.fittings};safeWrite(CAT_KEY,CAT)}}).catch(function(){})}
+function loadRepairs(){if(!GAS_URL||!navigator.onLine)return;
+  fetch(GAS_URL+'?action=repairs').then(function(r){return r.json()}).then(function(d){
+    if(!d||!Array.isArray(d.repairs))return;var q=safeRead(REPQ_KEY,[]);if(!Array.isArray(q))q=[];
+    d.repairs.forEach(function(r){if(r&&r.id&&q.indexOf(r.id)<0)REP[r.id]=r});safeWrite(REP_KEY,REP);draw()}).catch(function(){})}
+window.addEventListener('online',function(){syncRepairs();loadCatalog()});
+
+/* insights: cost + average time per phase (wraps renderKpis) */
+function renderCostInsights(base){
+  var recs=base.map(function(l){return REP[l.id]}).filter(Boolean),n=recs.length,tot=0,man=0,fit=0,ph={loc:0,exc:0,rep:0,res:0};
+  recs.forEach(function(r){var t=repTotals(r);tot+=t.total;man+=t.man;fit+=t.fit;PHASES.forEach(function(x){ph[x[0]]+=num((r.ph||{})[x[0]])})});
+  $('ixCost').textContent=peso(tot);$('ixCostSub').textContent=n?peso(tot/n)+' average per logged leak':'No repair logs yet';
+  $('ixMan').textContent=peso(man);$('ixFitC').textContent=peso(fit);$('ixLogN').textContent=n;
+  var avg=PHASES.map(function(x){return ph[x[0]]/(n||1)}),mx=Math.max.apply(null,avg.concat([1]));
+  $('ixPh').innerHTML=PHASES.map(function(x,i){return '<div class="phb"><span>'+x[1]+'</span><div><i style="width:'+(avg[i]/mx*100)+'%"></i></div><b>'+fdur(avg[i])+'</b></div>'}).join('')}
+var _renderKpis=renderKpis;renderKpis=function(b){_renderKpis(b);renderCostInsights(b)};
+loadCatalog();loadRepairs();syncRepairs();
+
 /* ── Downloads: CSV (GIS coordinates + map link) and map PNG with location tags ── */
 function dl(blob,name){var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},800)}
 function fname(ext){return 'AGUS_Leaks_'+plabel().replace(/[^\w]+/g,'_').replace(/^_|_$/g,'')+'.'+ext}
@@ -549,9 +813,9 @@ function csvCell(v){v=(v===undefined||v===null)?'':String(v);return /[",\r\n]/.t
 function exportCSV(){
   var rows=leaks.filter(visible);
   if(!rows.length){toast('No records in this view to export');return}
-  var head=['Leak ID','Latitude','Longitude','Status','Leak Type','Sub Type','Pipe Type','Address','POI Date','Leak Date','Repair Start Date','Repaired Date','Comments','Map Link'];
+  var head=['Leak ID','Latitude','Longitude','Status','Leak Type','Sub Type','Pipe Type','Address','POI Date','Leak Date','Repair Start Date','Repaired Date','Comments','Map Link','Detected At','Locate (min)','Excavation (min)','Repair (min)','Restoration (min)','Total (min)','Manpower Cost','Fittings Cost','Total Repair Cost'];
   var out=[head.join(',')].concat(rows.map(function(l){
-    return [l.id,l.lat,l.lng,labelOf(l.status),l.type,l.sub,l.pipe,l.address,dnorm(l.poi),dnorm(l.leak),dnorm(l.repairStart),dnorm(l.repaired),l.comments,'https://www.google.com/maps?q='+l.lat+','+l.lng].map(csvCell).join(',')}));
+    return [l.id,l.lat,l.lng,labelOf(l.status),l.type,l.sub,l.pipe,l.address,dnorm(l.poi),dnorm(l.leak),dnorm(l.repairStart),dnorm(l.repaired),l.comments,'https://www.google.com/maps?q='+l.lat+','+l.lng].concat(repCsv(l)).map(csvCell).join(',')}));
   dl(new Blob(['\ufeff'+out.join('\r\n')],{type:'text/csv;charset=utf-8'}),fname('csv'));
   toast('CSV downloaded · '+rows.length+' record'+(rows.length===1?'':'s'))}
 function rrect(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
