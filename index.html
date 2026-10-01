@@ -1,33 +1,52 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>AGUS Leak Detection</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
-*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:'DM Sans',Arial,sans-serif;color:#1e293b}
-body{display:flex;flex-direction:column}
-header{background:linear-gradient(90deg,#0b3d91,#6d28d9);color:#fff;padding:10px 16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
-header h1{font-size:15px;margin:0 10px 0 0}
+*{box-sizing:border-box}:root{--fs:12.5px;--pad:.8rem;--side:190px}
+html,body{margin:0;height:100%;font-family:'DM Sans','Segoe UI',sans-serif;color:#1e293b}
+body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;font-size:var(--fs);padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+header{background:linear-gradient(90deg,#0b3d91,#6d28d9);color:#fff;padding:calc(var(--pad)*.8) calc(var(--pad)*1.4);display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+header h1{font-size:calc(var(--fs)*1.2);margin:0 10px 0 0}
 .kpi{display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:12px;background:rgba(255,255,255,.14);cursor:pointer;border:2px solid transparent}
 .kpi.on{border-color:#fff}.kpi b{font-size:20px}.kpi span{font-size:11px;line-height:1.1}
 .dot{width:12px;height:12px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:inline-block}
 .act{background:#2563eb}.sus{background:#9333ea}.rep{background:#10b981}
-#bar{display:flex;gap:8px;padding:8px 14px;background:#eef2ff;align-items:center;flex-wrap:wrap;font-size:12px}
-#bar select,#bar button{padding:6px 10px;border-radius:8px;border:1px solid #c7d2fe;background:#fff;font-size:12px}
+#bar{display:flex;gap:8px;padding:calc(var(--pad)*.7) calc(var(--pad)*1.2);background:#eef2ff;align-items:center;flex-wrap:wrap;font-size:var(--fs)}
+#bar select,#bar button{padding:6px 10px;border-radius:8px;border:1px solid #c7d2fe;background:#fff;font-size:var(--fs);font-family:inherit}
 #bar button.p{background:linear-gradient(90deg,#2563eb,#7c3aed);color:#fff;border:0;font-weight:700;cursor:pointer}
 #wrap{flex:1;display:flex;min-height:0;position:relative}
-#side{width:190px;padding:10px;background:#f8fafc;border-right:1px solid #e2e8f0;font-size:12px;overflow:auto}
+#side{width:var(--side);padding:var(--pad);background:#f8fafc;border-right:1px solid #e2e8f0;font-size:var(--fs);overflow:auto;flex-shrink:0}
 #side h4{margin:4px 0 6px;font-size:11px;letter-spacing:.5px;color:#64748b;text-transform:uppercase}
 #side label{display:flex;gap:6px;align-items:center;margin:5px 0;cursor:pointer}
 #map{flex:1}
-#card{position:absolute;right:12px;top:12px;width:340px;max-width:calc(100% - 24px);max-height:calc(100% - 24px);overflow:auto;background:#fff;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.3);padding:14px;z-index:1000;display:none;font-size:12px}
+#card{position:absolute;right:12px;top:12px;width:340px;max-width:calc(100% - 24px);max-height:calc(100% - 24px);overflow:auto;background:#fff;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.3);padding:14px;z-index:1000;display:none;font-size:var(--fs)}
 #card h3{margin:0 0 6px;font-size:15px}.x{float:right;cursor:pointer;border:0;background:none;font-size:16px}
 .tl{display:flex;justify-content:space-between;margin:12px 0;text-align:center;font-size:10px;color:#64748b}
 .tl div{flex:1}.tl i{display:block;width:12px;height:12px;border-radius:50%;margin:0 auto 3px;background:#cbd5e1}.tl i.on{background:#10b981}
 .g{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#f1f5f9;border-radius:10px;padding:8px;margin-bottom:8px}.g small{color:#64748b;display:block}
 #card textarea{width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:6px;font:inherit}
-#msg{position:absolute;left:210px;bottom:10px;background:#1e293b;color:#fff;border-radius:8px;padding:6px 12px;font-size:12px;z-index:1000;display:none}
+#msg{position:absolute;left:calc(var(--side) + 20px);bottom:10px;background:#1e293b;color:#fff;border-radius:8px;padding:6px 12px;font-size:12px;z-index:1000;display:none}
+
+/* ── Same display-size tiers as the AGUS main dashboard (≤480 / 481–900 / 901–1400 / ≥1401) ── */
+@media screen and (min-width:1401px){:root{--fs:13.5px;--pad:1.2rem;--side:220px}.kpi b{font-size:24px}#card{width:380px}}
+@media screen and (min-width:901px) and (max-width:1400px){:root{--fs:12.5px;--pad:.8rem;--side:190px}}
+@media screen and (min-width:481px) and (max-width:900px){:root{--fs:12px;--pad:.6rem;--side:150px}.kpi b{font-size:17px}#card{width:300px}}
+@media screen and (max-width:480px){
+  :root{--fs:11px;--pad:.4rem}
+  header{gap:6px}header h1{width:100%;margin:0}
+  .kpi{padding:4px 8px}.kpi b{font-size:15px}
+  #wrap{flex-direction:column}
+  #side{width:100%;display:flex;gap:12px;align-items:center;overflow-x:auto;border-right:0;border-bottom:1px solid #e2e8f0;padding:4px 8px}
+  #side h4{display:none}#side label{white-space:nowrap;margin:0}
+  #card{left:6px;right:6px;top:auto;bottom:6px;width:auto;max-height:55%}
+  #msg{left:10px}
+}
+/* touch targets same as main (44px) */
+@media (hover:none) and (pointer:coarse){#bar select,#bar button,.kpi{min-height:44px}#side label{min-height:36px}#card .x{font-size:22px;min-width:40px;min-height:40px}}
 </style></head><body>
 <header>
   <h1>💧 AGUS Leak Detection</h1>
