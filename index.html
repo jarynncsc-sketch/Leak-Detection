@@ -245,8 +245,12 @@ body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-col
 /* Collapsible map legend: stays compact on phones, fully available on larger screens. */
 #legend .legend-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-2px 0 8px}
 #legend .legend-head-title{font-weight:800;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:#31456f;white-space:nowrap}
-#legendToggle{display:none;border:1px solid #d7e2f5;border-radius:9px;background:#edf3ff;color:#1742a5;padding:7px 10px;font:800 10px 'DM Sans',sans-serif;cursor:pointer;white-space:nowrap}
+#legendToggle{display:inline-flex;align-items:center;justify-content:center;border:1px solid #d7e2f5;border-radius:9px;background:#edf3ff;color:#1742a5;padding:7px 10px;font:800 10px 'DM Sans',sans-serif;cursor:pointer;white-space:nowrap}
 #legendToggle:focus-visible{outline:2px solid #2563eb;outline-offset:2px}
+/* Start compact on every device size; users can expand manually with Show. */
+#legend.legend-collapsed{width:auto;max-width:calc(100% - 18px);max-height:none;overflow:hidden;padding:7px 10px;border-radius:13px}
+#legend.legend-collapsed .legend-head{margin:0}
+#legend.legend-collapsed #legendContent{display:none}
 @media screen and (max-width:900px){
   /* Landscape legend: a wide, short panel with each legend group flowing horizontally. */
   #legend{max-width:calc(100% - 18px);max-height:calc(100% - 18px);padding:9px 12px;overflow:hidden;transition:width .18s ease,background .18s ease}
@@ -977,7 +981,7 @@ if(window.ResizeObserver){
   new ResizeObserver(fit).observe($('mapbox'));
   new ResizeObserver(syncTop).observe($('top'))}
 
-/* Responsive map legend: collapsed by default on touch-sized screens; user can expand it. */
+/* Map legend: collapsed on initial load at every screen size; user can expand it. */
 (function initLegendToggle(){
   var box=document.getElementById('legend'),btn=document.getElementById('legendToggle');
   if(!box||!btn)return;
@@ -989,12 +993,12 @@ if(window.ResizeObserver){
     btn.setAttribute('aria-label',collapsed?'Show map legend options':'Hide map legend options');
   }
   function syncLegendForScreen(){
-    if(window.matchMedia('(max-width: 900px)').matches){
-      if(!box.dataset.userToggled)setCollapsed(true);
-      else setCollapsed(box.classList.contains('legend-collapsed'));
+    /* Keep the current expanded/collapsed state on resize; first load is always collapsed. */
+    if(!box.dataset.initialized){
+      box.dataset.initialized='1';
+      setCollapsed(true);
     }else{
-      box.classList.remove('legend-collapsed','legend-expanded');
-      btn.setAttribute('aria-expanded','true');btn.textContent='Legend';
+      setCollapsed(box.classList.contains('legend-collapsed'));
     }
   }
   btn.addEventListener('click',function(){
