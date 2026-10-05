@@ -248,20 +248,27 @@ body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-col
 #legendToggle{display:none;border:1px solid #d7e2f5;border-radius:9px;background:#edf3ff;color:#1742a5;padding:7px 10px;font:800 10px 'DM Sans',sans-serif;cursor:pointer;white-space:nowrap}
 #legendToggle:focus-visible{outline:2px solid #2563eb;outline-offset:2px}
 @media screen and (max-width:900px){
-  #legend{max-width:min(260px,calc(100% - 18px));max-height:calc(100% - 28px);padding:9px 10px;overflow:hidden;transition:width .18s ease,background .18s ease}
+  /* Landscape legend: a wide, short panel with each legend group flowing horizontally. */
+  #legend{max-width:calc(100% - 18px);max-height:calc(100% - 18px);padding:9px 12px;overflow:hidden;transition:width .18s ease,background .18s ease}
   #legend .legend-head{margin:0;min-height:28px}
   #legendToggle{display:inline-flex;align-items:center;justify-content:center;min-height:30px}
-  #legend #legendContent{max-height:min(48dvh,390px);overflow:auto;overscroll-behavior:contain;padding-top:7px}
+  #legend #legendContent{max-height:min(42dvh,300px);overflow:auto;overscroll-behavior:contain;padding-top:7px}
   #legend.legend-collapsed{width:auto;max-width:calc(100% - 18px);padding:7px 9px;border-radius:13px}
   #legend.legend-collapsed .legend-head{margin:0}
   #legend.legend-collapsed #legendContent{display:none}
-  #legend.legend-expanded{width:260px}
-  #legend.legend-expanded #legendContent{display:block}
-  #legend .lg-t{margin-top:5px}
+  #legend.legend-expanded{width:min(680px,calc(100% - 18px))}
+  #legend.legend-expanded #legendContent{display:flex;flex-flow:row wrap;align-items:center;column-gap:12px;row-gap:2px}
+  #legend.legend-expanded #legendContent>.lg-t{flex:0 0 100%;margin:7px 0 1px}
+  #legend.legend-expanded #legendContent>hr{display:none}
+  #legend.legend-expanded #legendContent>label{display:inline-flex;flex:0 0 auto;margin:3px 4px 3px 0;white-space:nowrap}
+  #legend.legend-expanded #legendContent>.pcm{display:flex;flex-flow:row wrap;gap:5px 12px;flex:1 1 100%}
+  #legend.legend-expanded #pipeSizes{display:flex;flex-flow:row wrap;gap:2px 12px;flex:1 1 100%}
+  #legend.legend-expanded #pipeSizes label{flex:0 0 auto;margin:3px 4px 3px 0}
+  #legend.legend-expanded #pipeInfo{flex:1 1 100%;white-space:normal}
 }
 @media screen and (max-width:480px){
-  #legend.legend-expanded{width:min(250px,calc(100% - 18px))}
-  #legend #legendContent{max-height:42dvh}
+  #legend.legend-expanded{width:calc(100% - 18px)}
+  #legend #legendContent{max-height:38dvh}
 }
 
 </style></head><body>
