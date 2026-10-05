@@ -76,15 +76,15 @@ html,body{margin:0;height:100vh;height:100dvh;overflow:hidden;font-family:'DM Sa
 .seg button.on{background:linear-gradient(120deg,#2563eb,#4f6ef7);color:#fff}
 #dlabel{font-weight:800;color:#123aa0;margin-left:3px;white-space:nowrap}#dsum{color:#71809c;font-weight:700;white-space:nowrap}
 #dmeta{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
-#legend{position:absolute;bottom:16px;right:14px;left:auto;z-index:1000;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border:1px solid #dde5f6;border-radius:16px;box-shadow:0 12px 30px rgba(16,42,110,.16);padding:11px 14px;font-size:11px;max-width:calc(100% - 160px);overflow:auto}
+#legend{position:absolute;bottom:16px;right:14px;left:auto;z-index:1000;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border:1px solid #dde5f6;border-radius:16px;box-shadow:0 12px 30px rgba(16,42,110,.16);padding:10px 12px;font-size:11px;max-width:calc(100% - 160px);max-height:calc(100% - 28px);overflow:hidden;display:flex;flex-direction:column}
 @keyframes agusPulse{0%{transform:scale(.6);opacity:.45}100%{transform:scale(1.25);opacity:0}}
 /* Active Leak (red) and Ongoing Repair (orange) blink so crews catch them from a moving vehicle; Repaired stays steady green. */
 @keyframes agusBlink{0%,100%{opacity:1}50%{opacity:.18}}
 @media (prefers-reduced-motion:reduce){.act,.fix,.live-dot,.agus-blink{animation:none !important}}
-#legend .lg-t{font-weight:800;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#8c9ab4;margin-bottom:6px}
-#legend label{display:flex;gap:8px;align-items:center;margin:6px 0;cursor:pointer;white-space:nowrap;font-weight:600;color:#31456f}
-#legend hr{border:0;border-top:1px solid #e6ecf7;margin:8px 0}
-#legend #pipeInfo{font-size:9.5px;font-weight:700;color:#8c9ab4;letter-spacing:.2px;margin-top:5px;padding-top:5px;border-top:1px dashed #e6ecf7;white-space:nowrap}
+#legend .lg-t{font-weight:800;font-size:9.5px;letter-spacing:.9px;text-transform:uppercase;color:#93a1ba;margin:0 0 6px}
+#legend label{cursor:pointer}
+#legend hr{display:none}
+#legend #pipeInfo{font-size:9.5px;font-weight:700;color:#8c9ab4;letter-spacing:.2px;margin-top:8px;padding-top:6px;border-top:1px dashed #e2e9f8;white-space:nowrap}
 #card{position:absolute;right:18px;top:calc(var(--topH,86px) + 16px);width:376px;max-width:calc(100% - 36px);max-height:calc(100% - var(--topH,86px) - 40px);overflow:auto;background:rgba(255,255,255,.98);backdrop-filter:blur(10px);border:1px solid #dde5f6;border-radius:20px;box-shadow:0 20px 50px rgba(11,31,92,.3);padding:18px;z-index:1100;display:none;font-size:12px}
 #card h3{margin:0 0 4px;font-size:16px;color:#0f2a72;font-family:'Syne','DM Sans',sans-serif}
 #card .chip{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#fff;padding:4px 9px;border-radius:99px;margin-bottom:8px}
@@ -164,8 +164,10 @@ body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-col
  .tc b{font-size:20px;margin-bottom:1px}.tc .lb{font-size:9.5px;white-space:normal;line-height:1.15}.tc .sub{display:none}
  .tc.add{padding:9px 12px;font-size:11px}.tc.exp{min-width:56px;padding:8px 9px}
  .dbar{flex:1 1 100%;padding:6px;gap:5px}.dbar button,.dbar input,.dbar select{font-size:10px;padding:5px}.seg button{padding:5px 7px;font-size:10px}
- #legend{bottom:9px;left:auto;right:9px;padding:8px 10px;font-size:10px;border-radius:13px}
-#legend label{margin:4px 0;gap:6px}
+ #legend{bottom:9px;left:auto;right:9px;padding:8px 10px;font-size:10px;border-radius:13px;max-width:calc(100% - 18px);max-height:calc(100% - 18px)}
+  #legend .opt{padding:4px 7px;font-size:9.5px;border-radius:8px;gap:4px}
+  #legend .lg-opts .cnt{font-size:8.5px;padding:1px 4px}
+  #legend .lg-split{align-items:flex-start}
  #card{left:9px;right:9px;top:auto;bottom:204px;width:auto;max-height:56%;padding:14px;border-radius:18px}
  #src{left:9px;right:auto;top:auto;bottom:10px;max-width:calc(100% - 170px);overflow-wrap:anywhere}
  #syncBadge{left:9px;right:auto;top:auto;bottom:42px;max-width:calc(100% - 170px);overflow-wrap:anywhere}
@@ -233,56 +235,58 @@ body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-col
 .phb div{height:9px;background:#e9eef9;border-radius:6px;overflow:hidden}.phb i{display:block;height:100%;background:linear-gradient(90deg,#2563eb,#8b5cf6)}
 .phb b{text-align:right;font-size:11px}
 
-/* ── Pipe size category ── */
-#legend{max-height:calc(100% - 28px)}
-#legend .pcm{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:2px}
-#legend .pcm label{margin:3px 0}
-#legend .lgbar{display:inline-block;width:16px;border-radius:2px;flex:none}
-#legend .lgn{margin-left:auto;padding-left:10px;font-size:9.5px;font-weight:700;color:#8c9ab4}
-#legend:not(.bysize) #pipeSizes .lgbar{opacity:.5}
-#legend.bysize .pmat+i{opacity:.35}
-
-/* Collapsible map legend: stays compact on phones, fully available on larger screens. */
-#legend .legend-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-2px 0 8px}
+/* ── Map legend: grouped panels + uniform option chips ── */
+#legend .legend-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:none}
 #legend .legend-head-title{font-weight:800;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:#31456f;white-space:nowrap}
 #legendToggle{display:inline-flex;align-items:center;justify-content:center;border:1px solid #d7e2f5;border-radius:9px;background:#edf3ff;color:#1742a5;padding:7px 10px;font:800 10px 'DM Sans',sans-serif;cursor:pointer;white-space:nowrap}
 #legendToggle:focus-visible{outline:2px solid #2563eb;outline-offset:2px}
-/* Start compact on every device size; users can expand manually with Show. */
+
+/* One grid of tidy panels; the pipe panel spans the full row. */
+#legendContent{display:grid;grid-template-columns:repeat(auto-fit,minmax(212px,1fr));gap:8px;margin-top:9px;overflow:auto;overscroll-behavior:contain;min-height:0}
+.lg-sec{background:#f7f9ff;border:1px solid #e6ecf9;border-radius:12px;padding:8px 9px;min-width:0}
+.lg-sec.lg-wide{grid-column:1/-1}
+.lg-opts{display:flex;flex-wrap:wrap;gap:4px}
+.lg-opts.lg-split{align-items:center;gap:7px;margin-bottom:2px}
+.lg-split-lbl{margin:0;white-space:nowrap}
+.lg-opts .opt{display:inline-flex;align-items:center;gap:5px;margin:0;padding:4px 8px;border:1px solid #e2e9f8;border-radius:9px;background:#fff;cursor:pointer;font-weight:700;font-size:10.5px;color:#31456f;white-space:nowrap;line-height:1.25;transition:border-color .15s,box-shadow .15s}
+.lg-opts .opt:hover{border-color:#c3d4f7;box-shadow:0 3px 8px rgba(16,42,110,.08)}
+.lg-opts .opt input{margin:0;accent-color:#2563eb}
+#legend .lg-opts .opt .dot{width:9px;height:9px;box-shadow:none;border-radius:50%;transform:none;clip-path:none;flex:none}
+#legend .lg-opts .opt .lgbar{width:16px;border-radius:2px;flex:none}
+.lg-opts .opt .cnt{font-style:normal;font-weight:800;font-size:9px;color:#1f4bd0;background:#eaf0ff;border-radius:99px;padding:1px 5px}
+.lg-sub{margin-top:8px;padding-top:8px;border-top:1px dashed #e2e9f8}
+.lg-st{font-size:9px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#a2aec6;margin-bottom:5px}
+.lg-st i{font-style:normal;text-transform:none;letter-spacing:0;color:#b9c3d6}
+.lg-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(226px,1fr));gap:10px;margin-top:8px;padding-top:8px;border-top:1px dashed #e2e9f8}
+.lg-cols>.lg-sub{margin-top:0;padding-top:0;border-top:0}
+#legend .pcm{display:flex;flex-wrap:wrap;gap:4px}
+#legend #pipeSizes{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:4px 10px}
+#legend #pipeSizes label{display:flex;align-items:center;gap:6px;margin:0;padding:2px 0;font-size:10px;font-weight:700;color:#31456f;cursor:pointer;white-space:nowrap}
+#legend #pipeSizes .lgbar{display:inline-block;width:20px;border-radius:2px;flex:none}
+#legend .lgn{margin-left:auto;padding-left:8px;font-size:9px;font-weight:700;color:#93a1ba}
+/* Dim the key that is not currently driving the pipe colours. */
+#legend:not(.bysize) #lgSizes{opacity:.5}
+#legend.bysize #lgMats{opacity:.5}
+
+/* Collapsible: compact header by default, full panel on demand. */
 #legend.legend-collapsed{width:auto;max-width:calc(100% - 18px);max-height:none;overflow:hidden;padding:7px 10px;border-radius:13px}
-#legend.legend-collapsed .legend-head{margin:0}
+#legend.legend-collapsed .legend-head-title{font-size:9.5px}
 #legend.legend-collapsed #legendContent{display:none}
-/* Expanded legend details use a horizontal, wrapping layout at EVERY screen size. */
-#legend.legend-expanded{width:min(780px,calc(100% - 28px));max-width:calc(100% - 28px);}
-#legend.legend-expanded #legendContent{display:flex;flex-flow:row wrap;align-items:center;column-gap:12px;row-gap:3px;max-height:min(46vh,360px);overflow:auto;overscroll-behavior:contain;padding-top:7px}
-#legend.legend-expanded #legendContent>.lg-t{flex:0 0 100%;margin:7px 0 1px}
-#legend.legend-expanded #legendContent>hr{display:none}
-#legend.legend-expanded #legendContent>label{display:inline-flex;flex:0 0 auto;margin:3px 4px 3px 0;white-space:nowrap}
-#legend.legend-expanded #legendContent>.pcm{display:flex;flex-flow:row wrap;gap:5px 12px;flex:1 1 100%}
-#legend.legend-expanded #pipeSizes{display:flex;flex-flow:row wrap;gap:2px 12px;flex:1 1 100%}
-#legend.legend-expanded #pipeSizes label{flex:0 0 auto;margin:3px 4px 3px 0}
-#legend.legend-expanded #pipeInfo{flex:1 1 100%;white-space:normal}
+#legend.legend-expanded{width:min(720px,calc(100% - 28px));max-width:calc(100% - 28px)}
+#legend.legend-expanded #legendContent{max-height:min(52vh,400px)}
 @media screen and (max-width:900px){
-  /* Landscape legend: a wide, short panel with each legend group flowing horizontally. */
-  #legend{max-width:calc(100% - 18px);max-height:calc(100% - 18px);padding:9px 12px;overflow:hidden;transition:width .18s ease,background .18s ease}
-  #legend .legend-head{margin:0;min-height:28px}
-  #legendToggle{display:inline-flex;align-items:center;justify-content:center;min-height:30px}
-  #legend #legendContent{max-height:min(42dvh,300px);overflow:auto;overscroll-behavior:contain;padding-top:7px}
-  #legend.legend-collapsed{width:auto;max-width:calc(100% - 18px);padding:7px 9px;border-radius:13px}
-  #legend.legend-collapsed .legend-head{margin:0}
-  #legend.legend-collapsed #legendContent{display:none}
-  #legend.legend-expanded{width:min(680px,calc(100% - 18px))}
-  #legend.legend-expanded #legendContent{display:flex;flex-flow:row wrap;align-items:center;column-gap:12px;row-gap:2px}
-  #legend.legend-expanded #legendContent>.lg-t{flex:0 0 100%;margin:7px 0 1px}
-  #legend.legend-expanded #legendContent>hr{display:none}
-  #legend.legend-expanded #legendContent>label{display:inline-flex;flex:0 0 auto;margin:3px 4px 3px 0;white-space:nowrap}
-  #legend.legend-expanded #legendContent>.pcm{display:flex;flex-flow:row wrap;gap:5px 12px;flex:1 1 100%}
-  #legend.legend-expanded #pipeSizes{display:flex;flex-flow:row wrap;gap:2px 12px;flex:1 1 100%}
-  #legend.legend-expanded #pipeSizes label{flex:0 0 auto;margin:3px 4px 3px 0}
-  #legend.legend-expanded #pipeInfo{flex:1 1 100%;white-space:normal}
+  #legend{max-width:calc(100% - 18px);max-height:calc(100% - 18px);padding:9px 12px;overflow:hidden;transition:width .18s ease}
+  #legend .legend-head{min-height:28px}
+  #legendToggle{min-height:30px}
+  #legend.legend-collapsed{padding:7px 9px}
+  /* Expanded legend clears the source/sync badges stacked at the bottom-left. */
+  #legend.legend-expanded{width:calc(100% - 18px);bottom:78px}
+  #legend #legendContent{grid-template-columns:1fr;max-height:min(50dvh,360px)}
+  #legend #pipeSizes{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media screen and (max-width:480px){
-  #legend.legend-expanded{width:calc(100% - 18px)}
-  #legend #legendContent{max-height:38dvh}
+  #legend.legend-expanded{bottom:74px}
+  #legend #legendContent{max-height:46dvh}
 }
 
 </style></head><body>
@@ -370,27 +374,52 @@ body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-col
     <div id="legend" class="legend-collapsed">
       <div class="legend-head"><span class="legend-head-title">🗺 Map Legend</span><button type="button" id="legendToggle" aria-expanded="false" aria-controls="legendContent">Show</button></div>
       <div id="legendContent">
-      <div class="lg-t">Map layers</div>
-      <label><input type="radio" name="bm" value="sat" checked> Satellite</label>
-      <label><input type="radio" name="bm" value="street"> Street</label><hr>
-      <div class="lg-t">Status</div>
-      <label><input type="checkbox" class="lay" value="Active" checked><i class="dot act"></i> Active Leak</label>
-      <label><input type="checkbox" class="lay" value="Repair" checked><i class="dot fix"></i> Ongoing Repair</label>
-      <label><input type="checkbox" class="lay" value="Repaired" checked><i class="dot rep"></i> Repaired</label>
-      <label><input type="checkbox" class="lay" value="Suspected" checked><i class="dot sus"></i> Suspected</label><hr>
-      <div class="lg-t">Pipe network</div>
-      <div class="pcm" role="radiogroup" aria-label="Colour pipes by"><label><input type="radio" name="pcm" value="mat" checked> Colour by material</label><label><input type="radio" name="pcm" value="size"> Colour by size</label></div>
-      <label><input type="checkbox" id="pipesChk" class="pmat" data-m="UPVC" checked><i class="dot" style="background:#16a34a;border:1px solid #0f7c32"></i> UPVC</label>
-      <label><input type="checkbox" id="pipesChk2" class="pmat" data-m="PE" checked><i class="dot" style="background:#2563eb;border:1px solid #1e4fd9"></i> PE</label>
-      <label><input type="checkbox" id="pipesChk3" class="pmat" data-m="PVC" checked><i class="dot" style="background:#0ea5e9;border:1px solid #0284c7"></i> PVC</label>
-      <label><input type="checkbox" id="pipesChk4" class="pmat" data-m="GI" checked><i class="dot" style="background:#f59e0b;border:1px solid #d97706"></i> GI</label>
-      <label><input type="checkbox" id="pipesChk5" class="pmat" data-m="CI" checked><i class="dot" style="background:#dc2626;border:1px solid #b91c1c"></i> CI</label>
-      <label><input type="checkbox" id="pipesChk6" class="pmat" data-m="CEMENT COATED" checked><i class="dot" style="background:#7c2d12;border:1px solid #431407"></i> Cement coated</label>
-      <label><input type="checkbox" id="pipesChk7" class="pmat" data-m="Unknown" checked><i class="dot" style="background:#94a3b8;border:1px solid #64748b"></i> Unknown</label>
-      <div class="lg-t" style="margin-top:8px">Pipe size &middot; line thickness</div>
-      <div id="pipeSizes"></div>
-      <div id="pipeInfo"></div>
-      <div id="buildTag" style="margin-top:4px;font-size:9px;color:#aab6cf">build 2026-10-05 &middot; pipe sizes &middot; repair log</div>
+        <section class="lg-sec">
+          <div class="lg-t">Basemap</div>
+          <div class="lg-opts">
+            <label class="opt"><input type="radio" name="bm" value="sat" checked><span>Satellite</span></label>
+            <label class="opt"><input type="radio" name="bm" value="street"><span>Street</span></label>
+          </div>
+        </section>
+        <section class="lg-sec">
+          <div class="lg-t">Leak status</div>
+          <div class="lg-opts">
+            <label class="opt"><input type="checkbox" class="lay" value="Active" checked><i class="dot act"></i><span>Active</span><em class="cnt" id="lg-Active">0</em></label>
+            <label class="opt"><input type="checkbox" class="lay" value="Repair" checked><i class="dot fix"></i><span>Ongoing</span><em class="cnt" id="lg-Repair">0</em></label>
+            <label class="opt"><input type="checkbox" class="lay" value="Repaired" checked><i class="dot rep"></i><span>Repaired</span><em class="cnt" id="lg-Repaired">0</em></label>
+            <label class="opt"><input type="checkbox" class="lay" value="Suspected" checked><i class="dot sus"></i><span>Suspected</span><em class="cnt" id="lg-Suspected">0</em></label>
+          </div>
+        </section>
+        <section class="lg-sec lg-wide">
+          <div class="lg-t">Pipe network</div>
+          <div class="lg-opts lg-split">
+            <span class="lg-st lg-split-lbl">Colour pipes by</span>
+            <div class="pcm" role="radiogroup" aria-label="Colour pipes by">
+              <label class="opt"><input type="radio" name="pcm" value="mat" checked><span>Material</span></label>
+              <label class="opt"><input type="radio" name="pcm" value="size"><span>Size</span></label>
+            </div>
+          </div>
+          <div class="lg-cols">
+            <div class="lg-sub" id="lgMats">
+              <div class="lg-st">Material <i>· tap to hide</i></div>
+              <div class="lg-opts">
+                <label class="opt"><input type="checkbox" id="pipesChk" class="pmat" data-m="UPVC" checked><i class="lgbar" style="height:3px;background:#16a34a"></i><span>UPVC</span></label>
+                <label class="opt"><input type="checkbox" id="pipesChk2" class="pmat" data-m="PE" checked><i class="lgbar" style="height:3px;background:#2563eb"></i><span>PE</span></label>
+                <label class="opt"><input type="checkbox" id="pipesChk3" class="pmat" data-m="PVC" checked><i class="lgbar" style="height:3px;background:#0ea5e9"></i><span>PVC</span></label>
+                <label class="opt"><input type="checkbox" id="pipesChk4" class="pmat" data-m="GI" checked><i class="lgbar" style="height:3px;background:#f59e0b"></i><span>GI</span></label>
+                <label class="opt"><input type="checkbox" id="pipesChk5" class="pmat" data-m="CI" checked><i class="lgbar" style="height:3px;background:#dc2626"></i><span>CI</span></label>
+                <label class="opt"><input type="checkbox" id="pipesChk6" class="pmat" data-m="CEMENT COATED" checked><i class="lgbar" style="height:3px;background:#7c2d12"></i><span>Cement coated</span></label>
+                <label class="opt"><input type="checkbox" id="pipesChk7" class="pmat" data-m="Unknown" checked><i class="lgbar" style="height:3px;background:#94a3b8"></i><span>Unknown</span></label>
+              </div>
+            </div>
+            <div class="lg-sub" id="lgSizes">
+              <div class="lg-st">Size <i>· line thickness</i></div>
+              <div id="pipeSizes"></div>
+            </div>
+          </div>
+          <div id="pipeInfo"></div>
+          <div id="buildTag" style="font-size:9px;color:#aab6cf">build 2026-10-05 &middot; pipe sizes &middot; repair log</div>
+        </section>
       </div>
     </div>
     <div id="src"></div><div id="syncBadge" aria-live="polite">Checking sync status…</div><div id="card"></div><div id="addForm" role="dialog" aria-modal="true" aria-label="Record leak location"></div><div id="repForm" role="dialog" aria-modal="true" aria-label="Repair log and cost"></div><div id="msg" role="status" aria-live="polite"></div>
@@ -635,7 +664,7 @@ function ok(l){return typeOK(l)&&inPeriod(l)&&matches(l)}
 function draw(){
   Object.keys(markers).forEach(function(k){map.removeLayer(markers[k])});markers={};
   var base=leaks.filter(ok);
-  STATUS_KEYS.forEach(function(s){$('n-'+s).textContent=base.filter(function(l){return l.status===s}).length});
+  STATUS_KEYS.forEach(function(s){var n=base.filter(function(l){return l.status===s}).length;$('n-'+s).textContent=n;var g=$('lg-'+s);if(g)g.textContent=n});
   $('n-Total').textContent=base.length;
   var fixed=base.filter(function(l){return l.status==='Repaired'}).length,
       open=base.filter(function(l){return l.status==='Active'||l.status==='Repair'}).length;
