@@ -241,6 +241,29 @@ body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-col
 #legend .lgn{margin-left:auto;padding-left:10px;font-size:9.5px;font-weight:700;color:#8c9ab4}
 #legend:not(.bysize) #pipeSizes .lgbar{opacity:.5}
 #legend.bysize .pmat+i{opacity:.35}
+
+/* Collapsible map legend: stays compact on phones, fully available on larger screens. */
+#legend .legend-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-2px 0 8px}
+#legend .legend-head-title{font-weight:800;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:#31456f;white-space:nowrap}
+#legendToggle{display:none;border:1px solid #d7e2f5;border-radius:9px;background:#edf3ff;color:#1742a5;padding:7px 10px;font:800 10px 'DM Sans',sans-serif;cursor:pointer;white-space:nowrap}
+#legendToggle:focus-visible{outline:2px solid #2563eb;outline-offset:2px}
+@media screen and (max-width:900px){
+  #legend{max-width:min(260px,calc(100% - 18px));max-height:calc(100% - 28px);padding:9px 10px;overflow:hidden;transition:width .18s ease,background .18s ease}
+  #legend .legend-head{margin:0;min-height:28px}
+  #legendToggle{display:inline-flex;align-items:center;justify-content:center;min-height:30px}
+  #legend #legendContent{max-height:min(48dvh,390px);overflow:auto;overscroll-behavior:contain;padding-top:7px}
+  #legend.legend-collapsed{width:auto;max-width:calc(100% - 18px);padding:7px 9px;border-radius:13px}
+  #legend.legend-collapsed .legend-head{margin:0}
+  #legend.legend-collapsed #legendContent{display:none}
+  #legend.legend-expanded{width:260px}
+  #legend.legend-expanded #legendContent{display:block}
+  #legend .lg-t{margin-top:5px}
+}
+@media screen and (max-width:480px){
+  #legend.legend-expanded{width:min(250px,calc(100% - 18px))}
+  #legend #legendContent{max-height:42dvh}
+}
+
 </style></head><body>
 <header class="app-header">
   <div class="brand-block">
@@ -323,7 +346,9 @@ body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-col
       <div class="tc exp" id="xcsv" title="Download the leaks currently shown (with GIS coordinates) as CSV"><b>⬇</b><span class="lb">CSV</span></div>
       <div class="tc exp" id="xpng" title="Download the current map view with location tags as a PNG image"><b>🗺</b><span class="lb">Map PNG</span></div>
     </div>
-    <div id="legend">
+    <div id="legend" class="legend-collapsed">
+      <div class="legend-head"><span class="legend-head-title">🗺 Map Legend</span><button type="button" id="legendToggle" aria-expanded="false" aria-controls="legendContent">Show</button></div>
+      <div id="legendContent">
       <div class="lg-t">Map layers</div>
       <label><input type="radio" name="bm" value="sat" checked> Satellite</label>
       <label><input type="radio" name="bm" value="street"> Street</label><hr>
@@ -345,6 +370,7 @@ body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-col
       <div id="pipeSizes"></div>
       <div id="pipeInfo"></div>
       <div id="buildTag" style="margin-top:4px;font-size:9px;color:#aab6cf">build 2026-10-05 &middot; pipe sizes &middot; repair log</div>
+      </div>
     </div>
     <div id="src"></div><div id="syncBadge" aria-live="polite">Checking sync status…</div><div id="card"></div><div id="addForm" role="dialog" aria-modal="true" aria-label="Record leak location"></div><div id="repForm" role="dialog" aria-modal="true" aria-label="Repair log and cost"></div><div id="msg" role="status" aria-live="polite"></div>
   </div>
@@ -943,6 +969,36 @@ if(window.visualViewport)window.visualViewport.addEventListener('resize',fit);
 if(window.ResizeObserver){
   new ResizeObserver(fit).observe($('mapbox'));
   new ResizeObserver(syncTop).observe($('top'))}
+
+/* Responsive map legend: collapsed by default on touch-sized screens; user can expand it. */
+(function initLegendToggle(){
+  var box=document.getElementById('legend'),btn=document.getElementById('legendToggle');
+  if(!box||!btn)return;
+  function setCollapsed(collapsed){
+    box.classList.toggle('legend-collapsed',collapsed);
+    box.classList.toggle('legend-expanded',!collapsed);
+    btn.setAttribute('aria-expanded',String(!collapsed));
+    btn.textContent=collapsed?'Show':'Hide';
+    btn.setAttribute('aria-label',collapsed?'Show map legend options':'Hide map legend options');
+  }
+  function syncLegendForScreen(){
+    if(window.matchMedia('(max-width: 900px)').matches){
+      if(!box.dataset.userToggled)setCollapsed(true);
+      else setCollapsed(box.classList.contains('legend-collapsed'));
+    }else{
+      box.classList.remove('legend-collapsed','legend-expanded');
+      btn.setAttribute('aria-expanded','true');btn.textContent='Legend';
+    }
+  }
+  btn.addEventListener('click',function(){
+    var collapsed=!box.classList.contains('legend-collapsed');
+    box.dataset.userToggled='1';setCollapsed(collapsed);
+  });
+  window.addEventListener('resize',syncLegendForScreen);
+  if(window.visualViewport)window.visualViewport.addEventListener('resize',syncLegendForScreen);
+  syncLegendForScreen();
+})();
+
 [].forEach.call(document.querySelectorAll('.pmat,input[name="pcm"]'),function(c){c.onchange=applyPipeFilter});
 load();setNetworkState();
 setTimeout(function(){
