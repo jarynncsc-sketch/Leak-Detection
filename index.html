@@ -554,7 +554,7 @@ function load(){
     var server=Array.isArray(d.leaks)?d.leaks:[];
     leaks=mergeById(cached,server);
     // Server values win over stale cache; pending edits win until their save is acknowledged.
-    leaks=mergeById(leaks,pending);cacheLeaks();updateSourceLabel('Connected · Google Sheets');draw();updateSyncBadge();syncPending();
+    leaks=mergeById(leaks,pending);cacheLeaks();updateSourceLabel('Connected · AGUS Database');draw();updateSyncBadge();syncPending();
   }).catch(function(){leaks=mergeById(cached,pending);updateSourceLabel('Connection unavailable · local records');draw();updateSyncBadge()})
 }
 function enqueue(l){var q=getPending(),item={id:String(l.id),leak:l,attempts:0,queuedAt:new Date().toISOString()};var i=q.findIndex(function(x){return String(x.id||((x.leak||{}).id))===String(l.id)});if(i>=0){item.attempts=q[i].attempts||0;item.queuedAt=q[i].queuedAt||item.queuedAt;q[i]=item}else q.push(item);setPending(q);cacheLeaks()}
@@ -569,7 +569,7 @@ function syncPending(){
     .then(function(body){
       if(body){try{var result=JSON.parse(body);if(result&&result.success===false)throw new Error(result.message||'Server rejected record')}catch(e){if(e instanceof SyntaxError){}else throw e}}
       var now=getPending();now=now.filter(function(x){return String(x.id||((x.leak||{}).id))!==String(leak.id)});setPending(now);
-      leaks=mergeById(leaks,[leak]);cacheLeaks();updateSourceLabel('Connected · Google Sheets');
+      leaks=mergeById(leaks,[leak]);cacheLeaks();updateSourceLabel('Connected · AGUS Database');
       syncBusy=false;draw();if(now.length)scheduleSync(400);else updateSyncBadge();
     })
     .catch(function(){var now=getPending();var i=now.findIndex(function(x){return String(x.id||((x.leak||{}).id))===String(leak.id)});if(i>=0){now[i].attempts=(now[i].attempts||0)+1;now[i].lastError='Upload not confirmed';now[i].lastAttemptAt=new Date().toISOString();setPending(now)}syncBusy=false;updateSourceLabel('Sync not confirmed · saved on device');updateSyncBadge();var tries=i>=0?now[i].attempts:1;scheduleSync(Math.min(60000,Math.pow(2,Math.min(tries,6))*1000))})
@@ -692,7 +692,7 @@ map.on('click',function(e){
 function showAddForm(){
   adding=false;$('add').textContent='＋ Add Leak';var f=$('addForm');f.style.display='block';
   f.innerHTML='<button class="closeform" id="closeAdd" type="button" aria-label="Close form">✕</button>'
-   +'<h3>＋ Record Leak Location</h3><p class="hint">Capture your phone location or enter coordinates manually. GPS can work without mobile data if Location is enabled. Records are saved on this device first and queued for Google Sheets synchronization.</p>'
+   +'<h3>＋ Record Leak Location</h3><p class="hint">Capture your phone location or enter coordinates manually. GPS can work without mobile data if Location is enabled. Records are saved on this device first and queued for AGUS Database synchronization.</p>'
    +'<div class="form-actions"><button class="primary" id="useGPS" type="button">◎ Use device GPS</button><button class="secondary" id="pickMap" type="button">⌖ Pick on map</button></div>'
    +'<div id="gpsStatus" role="status" aria-live="polite">Location not captured yet. You can enter coordinates manually.</div>'
    +'<div class="coordrow"><div><label for="newLat">Latitude *</label><input id="newLat" inputmode="decimal" autocomplete="off" placeholder="e.g. 10.112900" required></div><div><label for="newLng">Longitude *</label><input id="newLng" inputmode="decimal" autocomplete="off" placeholder="e.g. 123.674000" required></div></div>'
@@ -713,7 +713,7 @@ function showAddForm(){
     if(lat===0&&lng===0){status.textContent='Coordinates are 0,0. Confirm this is intentional before saving.';return}
     var init=$('newStatus').value, t=today();
     var l={id:'L-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).slice(2,6).toUpperCase(),lat:lat,lng:lng,status:init,type:$('newType').value,sub:$('newSub').value,pipe:$('newPipe').value.trim(),address:$('newAddress').value.trim(),poi:t,leak:(init==='Suspected'?'':t),repairStart:(init==='Repair'?t:''),repaired:'',comments:$('newComments').value.trim(),coordinateSource:status.textContent.indexOf('Location captured')>=0?'device-gps':(status.textContent.indexOf('Map point selected')>=0?'map':'manual'),createdAt:new Date().toISOString(),clientId:'agus-field-v2'};
-    save(l);draw();closeForm();map.setView([lat,lng],17);show(l);toast(navigator.onLine&&GAS_URL?'Leak recorded · syncing to Sheets':'Leak saved locally · sync when online');
+    save(l);draw();closeForm();map.setView([lat,lng],17);show(l);toast(navigator.onLine&&GAS_URL?'Leak recorded · syncing to AGUS Database':'Leak saved locally · sync when online');
   };
 }
 $('add').onclick=showAddForm;
@@ -802,7 +802,7 @@ function openRepairForm(l){
   RF={id:l.id,leak:l,start:(r&&r.start)||toLocalInput(d),ph:{loc:0,exc:0,rep:0,res:0},crew:[],fit:[]};
   if(r){PHASES.forEach(function(x){RF.ph[x[0]]=num((r.ph||{})[x[0]])});RF.crew=JSON.parse(JSON.stringify(r.crew||[]));RF.fit=JSON.parse(JSON.stringify(r.fit||[]))}
   var f=$('repForm'),h='<button class="closeform" id="rfClose" type="button" aria-label="Close form">✕</button><h3>⏱ Repair log &amp; cost</h3>'
-   +'<p class="hint">Leak '+esc(l.id)+' · saved on this device first, then synced to Google Sheets. You can save after each phase and come back to finish.</p>'
+   +'<p class="hint">Leak '+esc(l.id)+' · saved on this device first, then synced to AGUS Database. You can save after each phase and come back to finish.</p>'
    +'<label for="rfStart">Start · leak detected</label><input id="rfStart" type="datetime-local" value="'+esc(RF.start)+'">'
    +'<div class="rf-sec">Time spent per phase</div>';
   PHASES.forEach(function(x){var m=num(RF.ph[x[0]]);
@@ -878,7 +878,7 @@ function syncRepairs(){
    .then(function(body){var res=null;try{res=JSON.parse(body)}catch(e){}
      if(!res||res.success!==true)throw new Error(res&&res.message||'Server did not confirm');
      var cur=safeRead(REPQ_KEY,[]);safeWrite(REPQ_KEY,(Array.isArray(cur)?cur:[]).filter(function(x){return x!==id}));
-     repBusy=false;updateSourceLabel('Connected · Google Sheets');syncRepairs()})
+     repBusy=false;updateSourceLabel('Connected · AGUS Database');syncRepairs()})
    .catch(function(err){repBusy=false;updateSourceLabel('Repair log saved on device · server not confirmed');
      console.warn('Repair sync:',err&&err.message);setTimeout(syncRepairs,60000)})}
 function loadCatalog(){if(!GAS_URL||!navigator.onLine)return;
