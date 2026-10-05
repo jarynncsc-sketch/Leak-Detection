@@ -251,6 +251,16 @@ body.offline #src{color:#b45309}body.offline #syncBadge{color:#b45309;border-col
 #legend.legend-collapsed{width:auto;max-width:calc(100% - 18px);max-height:none;overflow:hidden;padding:7px 10px;border-radius:13px}
 #legend.legend-collapsed .legend-head{margin:0}
 #legend.legend-collapsed #legendContent{display:none}
+/* Expanded legend details use a horizontal, wrapping layout at EVERY screen size. */
+#legend.legend-expanded{width:min(780px,calc(100% - 28px));max-width:calc(100% - 28px);}
+#legend.legend-expanded #legendContent{display:flex;flex-flow:row wrap;align-items:center;column-gap:12px;row-gap:3px;max-height:min(46vh,360px);overflow:auto;overscroll-behavior:contain;padding-top:7px}
+#legend.legend-expanded #legendContent>.lg-t{flex:0 0 100%;margin:7px 0 1px}
+#legend.legend-expanded #legendContent>hr{display:none}
+#legend.legend-expanded #legendContent>label{display:inline-flex;flex:0 0 auto;margin:3px 4px 3px 0;white-space:nowrap}
+#legend.legend-expanded #legendContent>.pcm{display:flex;flex-flow:row wrap;gap:5px 12px;flex:1 1 100%}
+#legend.legend-expanded #pipeSizes{display:flex;flex-flow:row wrap;gap:2px 12px;flex:1 1 100%}
+#legend.legend-expanded #pipeSizes label{flex:0 0 auto;margin:3px 4px 3px 0}
+#legend.legend-expanded #pipeInfo{flex:1 1 100%;white-space:normal}
 @media screen and (max-width:900px){
   /* Landscape legend: a wide, short panel with each legend group flowing horizontally. */
   #legend{max-width:calc(100% - 18px);max-height:calc(100% - 18px);padding:9px 12px;overflow:hidden;transition:width .18s ease,background .18s ease}
